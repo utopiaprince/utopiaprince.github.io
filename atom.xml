@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-01-13T08:47:41.000Z</updated>
+  <updated>2017-01-18T03:17:26.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,76 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>git-submodule体会</title>
+    <link href="http://yoursite.com/2017/01/18/git-submodule%E4%BD%93%E4%BC%9A/"/>
+    <id>http://yoursite.com/2017/01/18/git-submodule体会/</id>
+    <published>2017-01-18T02:45:22.000Z</published>
+    <updated>2017-01-18T03:17:26.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。</p>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>通过下面的指令来添加子模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add &lt;仓库地址&gt; &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>&lt;仓库地址&gt; 是我们想添加的子模块源仓库地址</li>
+<li>&lt;本地路径&gt; 是我们想把子模块存放在本项目下的路径,比如:libs/libxxx</li>
+</ul>
+<p>执行完上面命令以后，会做三件事：</p>
+<ol>
+<li>clone仓库到指定路径</li>
+<li><p>根目录下.gitmodule文件添加submodule具体信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;子模块名&quot;]</div><div class="line">    path = 本地路径</div><div class="line">    url = 仓库地址</div></pre></td></tr></table></figure>
+</li>
+<li><p>根目录下.git/config文件更新submodule的仓库地址 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;子模块名&quot;]</div><div class="line">    url = 仓库地址</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="检出"><a href="#检出" class="headerlink" title="检出"></a>检出</h2><p>clone一个带submodule的项目，clone完以后submodule的文件并不会随父项目一起检出，因为父项目只是记录了submodule的commitID，需要另外的操作才行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule init</div><div class="line">git submodule update</div></pre></td></tr></table></figure></p>
+<p>执行完上面命令以后，submodule的文件就会检出，每次submodule更新，都需要执行上面的命令。<br>或者我们可以在clone的时候通过添加<strong>- -recursive</strong>参数来一次性检出。</p>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>如果submodule有更新，在本地项目下git pull是不会更新submoudle的。我们需要通过下面的指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule update</div><div class="line">git submodule foreach git pull origin master</div></pre></td></tr></table></figure></p>
+<p>可以把上面2条指令写入update_submodules.sh脚本，每次执行只需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./update_submodules.sh</div></pre></td></tr></table></figure></p>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>如果某个submodule不需要了，想删除，那么我们需要删除 <strong>.git/config</strong> 和 <strong>.gitmodule</strong> 文件里面submodule相关部分，然后在执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rm --cached &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
+<p>这样才能将submodule从本地仓库删除干净，别忘记提交push。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>git submodule能够维护多个项目，好处很明显。但是缺点也存在，每次submodule更新，并不会主动更新带本地仓库，需要人为的去执行更新命令。所以想要每次主动执行update_submodules.sh。</p>
+<p>下一篇会介绍git submodule功能升级版git subtree。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。&lt;/p&gt;
+&lt;h2 id=&quot;添加&quot;&gt;&lt;a href=&quot;#添加&quot; class=&quot;headerlink&quot; title=&quot;添加&quot;&gt;&lt;/a&gt;添加&lt;/h2&gt;&lt;p&gt;通过下面的指令来添加子模块：&lt;br&gt;&lt;fig
+    
+    </summary>
+    
+    
+      <category term="git," scheme="http://yoursite.com/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LoRaWAN协议之入网分析</title>
+    <link href="http://yoursite.com/2017/01/17/LoRaWAN%E5%8D%8F%E8%AE%AE%E4%B9%8B%E5%85%A5%E7%BD%91%E5%88%86%E6%9E%90/"/>
+    <id>http://yoursite.com/2017/01/17/LoRaWAN协议之入网分析/</id>
+    <published>2017-01-17T02:19:55.000Z</published>
+    <updated>2017-01-18T02:32:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>待补充</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;待补充&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>awesome-iot</title>
     <link href="http://yoursite.com/2017/01/12/awesome-iot/"/>
     <id>http://yoursite.com/2017/01/12/awesome-iot/</id>
     <published>2017-01-12T05:09:50.000Z</published>
-    <updated>2017-01-13T08:47:41.000Z</updated>
+    <updated>2017-01-13T08:55:52.000Z</updated>
     
     <content type="html"><![CDATA[<p>一份物联网项目与资源的整理清单。</p>
 <blockquote>
@@ -54,7 +119,6 @@
 <li><a href="#Windows 10 IoT">Windows 10 IoT</a></li>
 </ul>
 </li>
-<li><a href="#编程语言">编程语言</a></li>
 <li><a href="#框架">框架</a></li>
 </ul>
 </li>
@@ -278,15 +342,6 @@
 <blockquote>
 <p>Windows 10物联网的核心是针对智能设备以及没有显示的一个Windows 10版本，并运行在Raspberry Pi的2和3，dragonboard 410c &amp; MinnowBoard。Windows 10物联网核心利用丰富的、可扩展的通用的Windows平台（UWP）API提供的解决方案。</p>
 </blockquote>
-<h4 id="编程语言"><a href="#编程语言" class="headerlink" title="编程语言"></a>编程语言</h4><ul>
-<li><a href="">C</a>-C语言一种通用的计算机编程语言，支持结构化编程、词法变量作用域和递归，同时静态类型可以防止许多意外操作.</li>
-<li><a href="">C++</a>-C++一种通用的程序设计语言。它具有过程化程序设计、面向对象程序设计、泛型程序设计等功能，同时在低级别的内存操作上也具有优势</li>
-<li><a href="">Groovy</a>-Groovy是一个功能强大、可选类型的动态语言，支持静态类型和静态编译。归功于其简洁、熟悉且易懂的语法，在Java平台上利用Groovy 进行Java 编程，可以成倍地提高开发者的效率。其常用于智能设备开发环境中智能应用程序的开发</li>
-<li><a href="">Lua</a>-Lua是一种强大、快速、轻量级、可嵌入的脚本语言。Lua是动态类型语言，通过在基于寄存器的虚拟机上解析字节码运行，具有自动内存管理和增量垃圾回收机制，极适于配置、脚本和快速原型开发</li>
-<li><a href="">eLua</a>-eLua所表达的意思就是嵌入式Lua，在嵌入式环境下提供了Lua语言的全部实现，同时扩展了其他一些特征以便于实现高效和可移植的嵌入式软件开发</li>
-<li><a href="">MicroPython</a>-MicroPython是Python 3编程语言的精简和高效实现，包括python标准库的一个小子集，并且为了在微控制器以及受限环境种运行做了优化。MicroPython包含了高级特性，如交互式提示，任意精度计算，闭包，列表解析，生成器，一场处理和更多。但它足够紧凑以适应运行在256k FALSH和16k RAM.</li>
-<li><a href="">JavaScript</a>-JavaScript 是一种面向对象的动态语言，它包含类型、运算符、标准内置（ built-in）对象和方法。它的语法来源于 Java 和 C，所以这两种语言的许多语法特性同样适用于 JavaScript。需要注意的一个主要区别是 JavaScript 不支持类，类这一概念在 JavaScript 通过对象原型（object prototype）得到延续（有关 ES6 类的内容参考这里Classes）。另一个主要区别是 JavaScript 中的函数也是对象，JavaScript 允许函数在包含可执行代码的同时，能像其他对象一样被传递。</li>
-</ul>
 <h4 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h4><ul>
 <li><a href="https://allseenalliance.org/framework" target="_blank" rel="external">AllJoyn</a></li>
 <li><a href="">Apple HomeKit</a></li>
@@ -422,7 +477,7 @@
     <link href="http://yoursite.com/2017/01/12/hello-world/"/>
     <id>http://yoursite.com/2017/01/12/hello-world/</id>
     <published>2017-01-12T03:32:59.000Z</published>
-    <updated>2017-01-12T03:32:59.000Z</updated>
+    <updated>2017-01-18T02:44:46.000Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
@@ -433,6 +488,14 @@
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+<hr>
+<p>title: git submodule心得体会<br>date: 2017-01-18 10:31:35</p>
+<h2 id="tags-git"><a href="#tags-git" class="headerlink" title="tags:git,"></a>tags:git,</h2><p>最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。</p>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>通过下面的指令来添加子模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add &lt;仓库地址&gt; &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>&lt;仓库地址&gt; 是我们想添加的子模块源仓库地址</li>
+<li>&lt;本地路径&gt; 是我们想把子模块存放在本项目下的路径,比如:libs/libxxx</li>
+</ul>
 ]]></content>
     
     <summary type="html">

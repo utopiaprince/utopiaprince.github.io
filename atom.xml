@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-01-18T03:17:26.000Z</updated>
+  <updated>2017-01-18T03:19:13.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,9 +20,10 @@
     <link href="http://yoursite.com/2017/01/18/git-submodule%E4%BD%93%E4%BC%9A/"/>
     <id>http://yoursite.com/2017/01/18/git-submodule体会/</id>
     <published>2017-01-18T02:45:22.000Z</published>
-    <updated>2017-01-18T03:17:26.000Z</updated>
+    <updated>2017-01-18T03:19:13.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。</p>
+<a id="more"></a>
 <h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>通过下面的指令来添加子模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add &lt;仓库地址&gt; &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
 <ul>
 <li>&lt;仓库地址&gt; 是我们想添加的子模块源仓库地址</li>
@@ -51,7 +52,6 @@
     <summary type="html">
     
       &lt;p&gt;最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。&lt;/p&gt;
-&lt;h2 id=&quot;添加&quot;&gt;&lt;a href=&quot;#添加&quot; class=&quot;headerlink&quot; title=&quot;添加&quot;&gt;&lt;/a&gt;添加&lt;/h2&gt;&lt;p&gt;通过下面的指令来添加子模块：&lt;br&gt;&lt;fig
     
     </summary>
     
@@ -477,9 +477,10 @@
     <link href="http://yoursite.com/2017/01/12/hello-world/"/>
     <id>http://yoursite.com/2017/01/12/hello-world/</id>
     <published>2017-01-12T03:32:59.000Z</published>
-    <updated>2017-01-18T02:44:46.000Z</updated>
+    <updated>2017-01-18T03:19:45.000Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<a id="more"></a>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
@@ -488,19 +489,11 @@
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-<hr>
-<p>title: git submodule心得体会<br>date: 2017-01-18 10:31:35</p>
-<h2 id="tags-git"><a href="#tags-git" class="headerlink" title="tags:git,"></a>tags:git,</h2><p>最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。</p>
-<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>通过下面的指令来添加子模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add &lt;仓库地址&gt; &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
-<ul>
-<li>&lt;仓库地址&gt; 是我们想添加的子模块源仓库地址</li>
-<li>&lt;本地路径&gt; 是我们想把子模块存放在本项目下的路径,比如:libs/libxxx</li>
-</ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
     
     </summary>
     

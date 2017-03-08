@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/index.html">
 <meta property="og:site_name" content="utopiaprince">
 <meta property="og:description" content="0 前言最新的LoRaWAN的V4版本已经不支持470MHz频段，如果需要支持的话，需要对源代码进行修改。">
-<meta property="og:updated_time" content="2017-02-13T03:16:55.000Z">
+<meta property="og:updated_time" content="2017-02-13T05:59:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LoRaWAN协议之添加频段支持">
 <meta name="twitter:description" content="0 前言最新的LoRaWAN的V4版本已经不支持470MHz频段，如果需要支持的话，需要对源代码进行修改。">
@@ -50,9 +50,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -91,14 +91,14 @@
 <h2 id="2-定义速率、功率配置表"><a href="#2-定义速率、功率配置表" class="headerlink" title="2 定义速率、功率配置表"></a>2 定义速率、功率配置表</h2><p>在LoRaMac.c源文件，与第一部分一样，添加宏编译，内容参考USB_BAND_433。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">#elif defined( USE_BAND_470 )</div><div class="line">/*!</div><div class="line"> * Data rates table definition</div><div class="line"> */</div><div class="line">const uint8_t Datarates[]  = &#123; 12, 11, 10,  9,  8,  7,  7, 50 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * Maximum payload with respect to the datarate index. Cannot operate with repeater.</div><div class="line"> */</div><div class="line">const uint8_t MaxPayloadOfDatarate[] = &#123; 59, 59, 59, 123, 250, 250, 250, 250 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * Maximum payload with respect to the datarate index. Can operate with repeater.</div><div class="line"> */</div><div class="line">const uint8_t MaxPayloadOfDatarateRepeater[] = &#123; 59, 59, 59, 123, 230, 230, 230, 230 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * Tx output powers table definition</div><div class="line"> */</div><div class="line">const int8_t TxPowers[]    = &#123; 20, 17, 14, 11,  8,  5,  2 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * LoRaMac bands</div><div class="line"> */</div><div class="line">static Band_t Bands[LORA_MAX_NB_BANDS] =</div><div class="line">&#123;</div><div class="line">    BAND0,</div><div class="line">&#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * LoRaMAC channels</div><div class="line"> */</div><div class="line">static ChannelParams_t Channels[LORA_MAX_NB_CHANNELS] =</div><div class="line">&#123;</div><div class="line">    LC1,</div><div class="line">    LC2,</div><div class="line">    LC3,</div><div class="line">    LC4,</div><div class="line">    LC5,</div><div class="line">    LC6,</div><div class="line">    LC7,</div><div class="line">    LC8,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <p>在TxPowers[]里面添加17选项。</p>
 <h2 id="3-信道修改"><a href="#3-信道修改" class="headerlink" title="3 信道修改"></a>3 信道修改</h2><p>从上面的配置信息我们也可以看出来，470相对433的通道有8个，433只有3个。所以代码里面需要在修改一下。对应LoRaMac.c源文件，搜索所有USB_BAND_433，首先修改信道掩码3处：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t *primitives, LoRaMacCallback_t *callbacks )</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">#if defined( USE_BAND_433 )</div><div class="line">    LoRaMacParamsDefaults.ChannelsMask[0] = LC( 1 ) + LC( 2 ) + LC( 3 );</div><div class="line">#elif defined( USE_BAND_470 )   //*&lt; 新增掩码修改1</div><div class="line">    LoRaMacParamsDefaults.ChannelsMask[0] = LC( 1 ) + LC( 2 ) + LC( 3 ) + LC( 4 ) + LC( 5 ) + LC( 6 ) + LC( 7 ) + LC( 8 );</div><div class="line">#elif defined( USE_BAND_780 )</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">static LoRaMacStatus_t ScheduleTx( )</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">    // Select channel</div><div class="line">    while( SetNextChannel( &amp;dutyCycleTimeOff ) == false )</div><div class="line">    &#123;</div><div class="line">        // Set the default datarate</div><div class="line">        LoRaMacParams.ChannelsDatarate = LoRaMacParamsDefaults.ChannelsDatarate;</div><div class="line"></div><div class="line">#if defined( USE_BAND_433 ) || defined( USE_BAND_780 ) || defined( USE_BAND_868 )</div><div class="line">        // Re-enable default channels LC1, LC2, LC3</div><div class="line">        LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) );</div><div class="line">#elif defined( USE_BAND_470 )   //*&lt; 新增掩码修改2</div><div class="line">        LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) + LC( 4 ) + LC( 5 ) + LC( 6 ) + LC( 7 ) + LC( 8 ) );</div><div class="line">#endif</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;    </div><div class="line"></div><div class="line">static void OnMacStateCheckTimerEvent( void )</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">#if defined( USE_BAND_433 ) || defined( USE_BAND_780 ) || defined( USE_BAND_868 )</div><div class="line">                // Re-enable default channels LC1, LC2, LC3</div><div class="line">                LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) );</div><div class="line">#elif defined( USE_BAND_470 )   //*&lt; 新增掩码修改3</div><div class="line">                LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) + LC( 4 ) + LC( 5 ) + LC( 6 ) + LC( 7 ) + LC( 8 ) );</div><div class="line">#elif defined( USE_BAND_915 )</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后所有剩余的usb_band_433后面添加usb_band_470。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#if defined( USE_BAND_433 ) ...</div></pre></td></tr></table></figure></p>
+<p>然后所有剩余的USB_BAND_433后面添加USB_BAND_470。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#if defined( USE_BAND_433 ) ...</div></pre></td></tr></table></figure></p>
 <p>修改成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#if defined( USE_BAND_433 ) || defined( USE_BAND_470 ) ...</div></pre></td></tr></table></figure></p>
 <p>这样就完成了LoRaWAN版本对470频段支持。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/" data-id="ciz2befq90003gvz6qfdwqoo3" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/" data-id="cj00lfm450002ls5awy6xlz3z" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN,</a></li></ul>
@@ -109,9 +109,18 @@
     
 <nav id="article-nav">
   
+    <a href="/2017/03/08/2017年成长计划/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nuevo</strong>
+      <div class="article-nav-title">
+        
+          2017年成长计划
+        
+      </div>
+    </a>
+  
   
     <a href="/2017/02/10/hexo引用站内文章链接/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Viejo</strong>
       <div class="article-nav-title">hexo引用站内文章链接</div>
     </a>
   
@@ -155,7 +164,7 @@ var duoshuoQuery = {short_name:"utopiaprince"};
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nube de Tags</h3>
     <div class="widget tagcloud">
       <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN,</a> <a href="/tags/git/" style="font-size: 10px;">git,</a> <a href="/tags/iot/" style="font-size: 10px;">iot,</a>
     </div>
@@ -164,9 +173,9 @@ var duoshuoQuery = {short_name:"utopiaprince"};
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archivos</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
     </div>
   </div>
 
@@ -174,9 +183,13 @@ var duoshuoQuery = {short_name:"utopiaprince"};
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Posts recientes</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/03/08/2017年成长计划/">2017年成长计划</a>
+          </li>
         
           <li>
             <a href="/2017/02/10/LoRaWAN协议之添加频段支持/">LoRaWAN协议之添加频段支持</a>
@@ -194,10 +207,6 @@ var duoshuoQuery = {short_name:"utopiaprince"};
             <a href="/2017/01/17/LoRaWAN协议之入网分析/">LoRaWAN协议之入网分析</a>
           </li>
         
-          <li>
-            <a href="/2017/01/12/awesome-iot/">awesome-iot</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -211,7 +220,7 @@ var duoshuoQuery = {short_name:"utopiaprince"};
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Gang.Cheng<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-02-13T03:16:55.000Z</updated>
+  <updated>2017-03-08T07:35:23.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,35 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>2017年成长计划</title>
+    <link href="http://yoursite.com/2017/03/08/2017%E5%B9%B4%E6%88%90%E9%95%BF%E8%AE%A1%E5%88%92/"/>
+    <id>http://yoursite.com/2017/03/08/2017年成长计划/</id>
+    <published>2017-03-08T06:38:32.000Z</published>
+    <updated>2017-03-08T07:35:23.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。</p>
+<a id="more"></a>
+<h2 id="SDK优化"><a href="#SDK优化" class="headerlink" title="SDK优化"></a>SDK优化</h2><p>现在基于wsnos的开发环境已经基本成熟，再此基础上开展的sdk化工作刚刚开头，在接下来的一年里，针对sdk方面，优化几点：协议栈的稳定性、开发使用便捷性和平台固定。</p>
+<h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><p>嵌入式sdk方面以无线协议做为基础，已经实现了与云的通信。个人对服务器方面的了解比较少，对于系统整体架构认知还有所欠缺，缺乏系统设计能力。在这一年里需要做到：以LoRaWAN为案例，自行搭建私有服务器，实现整套LPWA网络系统架设。</p>
+<h2 id="文档能力"><a href="#文档能力" class="headerlink" title="文档能力"></a>文档能力</h2><p>软件配套的文档写的太少，对于后续的开发者以及自己都是一个障碍，后续软件开发要重视起来，每个模块、系统文档工作都要配备好</p>
+<h2 id="演讲能力"><a href="#演讲能力" class="headerlink" title="演讲能力"></a>演讲能力</h2><p>计划在这一年里面针对sdk，架构方面做3次分享，把一年内的成果展示出来</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>LoRaWAN协议之添加频段支持</title>
     <link href="http://yoursite.com/2017/02/10/LoRaWAN%E5%8D%8F%E8%AE%AE%E4%B9%8B%E6%B7%BB%E5%8A%A0%E9%A2%91%E6%AE%B5%E6%94%AF%E6%8C%81/"/>
     <id>http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/</id>
     <published>2017-02-10T07:52:21.000Z</published>
-    <updated>2017-02-13T03:16:55.000Z</updated>
+    <updated>2017-02-13T05:59:04.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h2><p>最新的LoRaWAN的V4版本已经不支持470MHz频段，如果需要支持的话，需要对源代码进行修改。</p>
 <a id="more"></a>
@@ -30,7 +54,7 @@
 <h2 id="2-定义速率、功率配置表"><a href="#2-定义速率、功率配置表" class="headerlink" title="2 定义速率、功率配置表"></a>2 定义速率、功率配置表</h2><p>在LoRaMac.c源文件，与第一部分一样，添加宏编译，内容参考USB_BAND_433。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">#elif defined( USE_BAND_470 )</div><div class="line">/*!</div><div class="line"> * Data rates table definition</div><div class="line"> */</div><div class="line">const uint8_t Datarates[]  = &#123; 12, 11, 10,  9,  8,  7,  7, 50 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * Maximum payload with respect to the datarate index. Cannot operate with repeater.</div><div class="line"> */</div><div class="line">const uint8_t MaxPayloadOfDatarate[] = &#123; 59, 59, 59, 123, 250, 250, 250, 250 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * Maximum payload with respect to the datarate index. Can operate with repeater.</div><div class="line"> */</div><div class="line">const uint8_t MaxPayloadOfDatarateRepeater[] = &#123; 59, 59, 59, 123, 230, 230, 230, 230 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * Tx output powers table definition</div><div class="line"> */</div><div class="line">const int8_t TxPowers[]    = &#123; 20, 17, 14, 11,  8,  5,  2 &#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * LoRaMac bands</div><div class="line"> */</div><div class="line">static Band_t Bands[LORA_MAX_NB_BANDS] =</div><div class="line">&#123;</div><div class="line">    BAND0,</div><div class="line">&#125;;</div><div class="line"></div><div class="line">/*!</div><div class="line"> * LoRaMAC channels</div><div class="line"> */</div><div class="line">static ChannelParams_t Channels[LORA_MAX_NB_CHANNELS] =</div><div class="line">&#123;</div><div class="line">    LC1,</div><div class="line">    LC2,</div><div class="line">    LC3,</div><div class="line">    LC4,</div><div class="line">    LC5,</div><div class="line">    LC6,</div><div class="line">    LC7,</div><div class="line">    LC8,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <p>在TxPowers[]里面添加17选项。</p>
 <h2 id="3-信道修改"><a href="#3-信道修改" class="headerlink" title="3 信道修改"></a>3 信道修改</h2><p>从上面的配置信息我们也可以看出来，470相对433的通道有8个，433只有3个。所以代码里面需要在修改一下。对应LoRaMac.c源文件，搜索所有USB_BAND_433，首先修改信道掩码3处：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t *primitives, LoRaMacCallback_t *callbacks )</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">#if defined( USE_BAND_433 )</div><div class="line">    LoRaMacParamsDefaults.ChannelsMask[0] = LC( 1 ) + LC( 2 ) + LC( 3 );</div><div class="line">#elif defined( USE_BAND_470 )   //*&lt; 新增掩码修改1</div><div class="line">    LoRaMacParamsDefaults.ChannelsMask[0] = LC( 1 ) + LC( 2 ) + LC( 3 ) + LC( 4 ) + LC( 5 ) + LC( 6 ) + LC( 7 ) + LC( 8 );</div><div class="line">#elif defined( USE_BAND_780 )</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">static LoRaMacStatus_t ScheduleTx( )</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">    // Select channel</div><div class="line">    while( SetNextChannel( &amp;dutyCycleTimeOff ) == false )</div><div class="line">    &#123;</div><div class="line">        // Set the default datarate</div><div class="line">        LoRaMacParams.ChannelsDatarate = LoRaMacParamsDefaults.ChannelsDatarate;</div><div class="line"></div><div class="line">#if defined( USE_BAND_433 ) || defined( USE_BAND_780 ) || defined( USE_BAND_868 )</div><div class="line">        // Re-enable default channels LC1, LC2, LC3</div><div class="line">        LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) );</div><div class="line">#elif defined( USE_BAND_470 )   //*&lt; 新增掩码修改2</div><div class="line">        LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) + LC( 4 ) + LC( 5 ) + LC( 6 ) + LC( 7 ) + LC( 8 ) );</div><div class="line">#endif</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;    </div><div class="line"></div><div class="line">static void OnMacStateCheckTimerEvent( void )</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">#if defined( USE_BAND_433 ) || defined( USE_BAND_780 ) || defined( USE_BAND_868 )</div><div class="line">                // Re-enable default channels LC1, LC2, LC3</div><div class="line">                LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) );</div><div class="line">#elif defined( USE_BAND_470 )   //*&lt; 新增掩码修改3</div><div class="line">                LoRaMacParams.ChannelsMask[0] = LoRaMacParams.ChannelsMask[0] | ( LC( 1 ) + LC( 2 ) + LC( 3 ) + LC( 4 ) + LC( 5 ) + LC( 6 ) + LC( 7 ) + LC( 8 ) );</div><div class="line">#elif defined( USE_BAND_915 )</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后所有剩余的usb_band_433后面添加usb_band_470。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#if defined( USE_BAND_433 ) ...</div></pre></td></tr></table></figure></p>
+<p>然后所有剩余的USB_BAND_433后面添加USB_BAND_470。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#if defined( USE_BAND_433 ) ...</div></pre></td></tr></table></figure></p>
 <p>修改成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#if defined( USE_BAND_433 ) || defined( USE_BAND_470 ) ...</div></pre></td></tr></table></figure></p>
 <p>这样就完成了LoRaWAN版本对470频段支持。</p>
 ]]></content>
@@ -51,12 +75,12 @@
     <link href="http://yoursite.com/2017/02/10/hexo%E5%BC%95%E7%94%A8%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E9%93%BE%E6%8E%A5/"/>
     <id>http://yoursite.com/2017/02/10/hexo引用站内文章链接/</id>
     <published>2017-02-10T01:39:34.000Z</published>
-    <updated>2017-02-10T01:40:57.000Z</updated>
+    <updated>2017-03-08T06:52:10.000Z</updated>
     
-    <content type="html"><![CDATA[<p>Hexo关于引用站内文章的链接，可以使用以下语法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</div></pre></td></tr></table></figure></p>
+    <content type="html"><![CDATA[<p>Hexo关于引用站内文章的链接，可以使用以下语法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% post_link 文章名称 点击这里查看这篇文章 %&#125;</div></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <ul>
-<li><strong>markdown-learning-by-maxiang</strong>是你的文章名称。如果文章不存在，这段代码将会被直接忽略。</li>
+<li><strong>文章名称</strong>是你的文章名称。如果文章不存在，这段代码将会被直接忽略。</li>
 <li><strong>点击这里查看这篇文章</strong>是该链接的标题。如果置空，则自动提取文章的标题。</li>
 </ul>
 <a href="/2017/01/18/git-submodule体会/" title="点击这里查看git-submodule体会">点击这里查看git-submodule体会</a>
@@ -64,7 +88,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;Hexo关于引用站内文章的链接，可以使用以下语法:&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&amp;#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+      &lt;p&gt;Hexo关于引用站内文章的链接，可以使用以下语法:&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&amp;#123;% post_link 文章名称 点击这里查看这篇文章 %&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
     
     </summary>
     

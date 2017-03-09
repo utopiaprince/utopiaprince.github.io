@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-08T07:38:03.000Z</updated>
+  <updated>2017-03-09T07:21:04.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/03/08/2017%E5%B9%B4%E6%88%90%E9%95%BF%E8%AE%A1%E5%88%92/"/>
     <id>http://yoursite.com/2017/03/08/2017年成长计划/</id>
     <published>2017-03-08T06:38:32.000Z</published>
-    <updated>2017-03-08T07:38:03.000Z</updated>
+    <updated>2017-03-09T07:21:04.000Z</updated>
     
     <content type="html"><![CDATA[<p>进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。</p>
 <a id="more"></a>
@@ -38,8 +38,8 @@
 <h2 id="演讲能力"><a href="#演讲能力" class="headerlink" title="演讲能力"></a>演讲能力</h2><p>计划在这一年里面针对sdk，架构方面做3次分享，把一年内的成果展示出来</p>
 <ul>
 <li>SDK PPT分享</li>
-<li>LoRaWAN 系统架构分享</li>
-<li>待定</li>
+<li>LoRaWAN系统架构分享</li>
+<li>软件开发测试分享</li>
 </ul>
 ]]></content>
     

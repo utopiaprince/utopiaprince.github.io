@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archiv: 2017/1 | utopiaprince</title>
+  <title>jenkins与gitlab配置记录 | utopiaprince</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="utopiaprince">
-<meta property="og:url" content="http://yoursite.com/archives/2017/01/index.html">
+  <meta name="description" content="在jenkins与gitlab配置过程中，有些具体问题，记录下来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenkins与gitlab配置记录">
+<meta property="og:url" content="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/index.html">
 <meta property="og:site_name" content="utopiaprince">
+<meta property="og:description" content="在jenkins与gitlab配置过程中，有些具体问题，记录下来">
+<meta property="og:updated_time" content="2017-03-15T02:53:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="utopiaprince">
+<meta name="twitter:title" content="jenkins与gitlab配置记录">
+<meta name="twitter:description" content="在jenkins与gitlab配置过程中，有些具体问题，记录下来">
   
     <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
   
@@ -57,98 +61,79 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/01/18/git-submodule体会/" class="archive-article-date">
-  <time datetime="2017-01-18T02:45:22.000Z" itemprop="datePublished">Jan 18</time>
+        <section id="main"><article id="post-jenkins与gitlab配置记录" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/15/jenkins与gitlab配置记录/" class="article-date">
+  <time datetime="2017-03-15T02:35:08.000Z" itemprop="datePublished">2017-03-15</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/18/git-submodule体会/">git-submodule体会</a>
+    <h1 class="article-title" itemprop="name">
+      jenkins与gitlab配置记录
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/01/17/LoRaWAN协议之入网分析/" class="archive-article-date">
-  <time datetime="2017-01-17T02:19:55.000Z" itemprop="datePublished">Jan 17</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/17/LoRaWAN协议之入网分析/">LoRaWAN协议之入网分析</a>
-    </h1>
-  
+        <p>在jenkins与gitlab配置过程中，有些具体问题，记录下来</p>
+<a id="more"></a>
+<h2 id="gitlab-webhooks"><a href="#gitlab-webhooks" class="headerlink" title="gitlab webhooks"></a>gitlab webhooks</h2><p>因为使用的是gitlab ce版本，所以并没有jenkins插件，需要使用webhooks来进行推送。<br>打开一个项目，点击设置-&gt;Integrations，看到webhooks。<br>根据项目需要构建条件，选择event。这里我默认push events，ssl verification，其他不要。<br>在url里面填入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;Jenkins server: port&gt;/project/&lt;job name&gt;/notify_commit</div></pre></td></tr></table></figure></p>
+<ul>
+<li>notify_commit 会让jenkins立即知道代码仓库发生了变化</li>
+</ul>
+<p>点击测试，可以在jenkins界面，看到构建过程</p>
+<h2 id="服务器ip转发问题"><a href="#服务器ip转发问题" class="headerlink" title="服务器ip转发问题"></a>服务器ip转发问题</h2><p>因为jenkins与gitlab服务配置在同一台服务器上面，而2个服务都有对应的外网。在配置jenkins拉取gitlab代码的时候，会因为ip路由问题，无法成功，这里要用到iptables来建立转发：</p>
+<pre><code>sudo iptables -t nat -A OUTPUT -p tcp --dst &lt;外网ip&gt; --dport &lt;gitlab外网端口&gt; -j REDIRECT
+sudo /sbin/iptables-save
+</code></pre><p>命令输入以后，以后对gitlab的访问ip都映射到localhost。同时保存了iptables配置，防止服务器重启以后在此输入。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/01/12/awesome-iot/" class="archive-article-date">
-  <time datetime="2017-01-12T05:09:50.000Z" itemprop="datePublished">Jan 12</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/12/awesome-iot/">awesome-iot</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/01/12/hello-world/" class="archive-article-date">
-  <time datetime="2017-01-12T03:32:59.000Z" itemprop="datePublished">Jan 12</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj0adhhwe000455nikjvef9iq" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/12/hello-world/">Hello World</a>
-    </h1>
-  
-
-    </header>
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/08/2017年成长计划/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">2017年成长计划</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
-
+<!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="post-jenkins与gitlab配置记录" data-title="jenkins与gitlab配置记录" data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"utopiaprince"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共JS代码 end -->
 </section>
         
           <aside id="sidebar">

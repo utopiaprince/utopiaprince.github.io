@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-15T02:53:22.000Z</updated>
+  <updated>2017-04-04T12:14:21.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>goglang入门配置记录</title>
+    <link href="http://yoursite.com/2017/04/04/goglang%E5%85%A5%E9%97%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
+    <id>http://yoursite.com/2017/04/04/goglang入门配置记录/</id>
+    <published>2017-04-04T11:56:56.000Z</published>
+    <updated>2017-04-04T12:14:21.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="2017-04-04"><a href="#2017-04-04" class="headerlink" title="2017-04-04"></a>2017-04-04</h2><h3 id="go-get-慢"><a href="#go-get-慢" class="headerlink" title="go get 慢"></a>go get 慢</h3><p>因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：<a href="http://golangtc.com/download/package" target="_blank" rel="external">下载第三方包</a></p>
+<a id="more"></a>
+<h3 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h3><p>源代码如果需要使用到网络上的仓库比如：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="string">"github.com/xxx/xxx"</span></div></pre></td></tr></table></figure></p>
+<p>那么需要把源代码放入GOPATH的src目录下</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;2017-04-04&quot;&gt;&lt;a href=&quot;#2017-04-04&quot; class=&quot;headerlink&quot; title=&quot;2017-04-04&quot;&gt;&lt;/a&gt;2017-04-04&lt;/h2&gt;&lt;h3 id=&quot;go-get-慢&quot;&gt;&lt;a href=&quot;#go-get-慢&quot; class=&quot;headerlink&quot; title=&quot;go get 慢&quot;&gt;&lt;/a&gt;go get 慢&lt;/h3&gt;&lt;p&gt;因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：&lt;a href=&quot;http://golangtc.com/download/package&quot;&gt;下载第三方包&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="goglang" scheme="http://yoursite.com/tags/goglang/"/>
+    
+  </entry>
   
   <entry>
     <title>jenkins与gitlab配置记录</title>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-04T12:14:21.000Z</updated>
+  <updated>2017-04-07T08:34:27.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,46 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>github上go库说明记录</title>
+    <link href="http://yoursite.com/2017/04/06/github%E4%B8%8Ago%E5%BA%93%E8%AF%B4%E6%98%8E%E8%AE%B0%E5%BD%95/"/>
+    <id>http://yoursite.com/2017/04/06/github上go库说明记录/</id>
+    <published>2017-04-06T12:51:10.000Z</published>
+    <updated>2017-04-07T08:34:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在github上有很多go库，这里作为一个介绍记录，便于以后查找</p>
+<a id="more"></a>
+<h2 id="urfave"><a href="#urfave" class="headerlink" title="urfave"></a><a href="https://github.com/urfave/cli" target="_blank" rel="external">urfave</a></h2><p>cli is a simple, fast, and fun package for building command line apps in Go.<br>The goal is to enable developers to write fast and distributable command line applications in an expressive way.</p>
+<h2 id="logrus"><a href="#logrus" class="headerlink" title="logrus"></a><a href="github.com/Sirupsen/logrus">logrus</a></h2><p>Structured, pluggable logging for Go. Nicely color-coded in development.</p>
+<h2 id="sql-migrate"><a href="#sql-migrate" class="headerlink" title="sql-migrate"></a><a href="github.com/rubenv/sql-migrate">sql-migrate</a></h2><p>SQL schema migration tool for Go. Based on gorp and goose.</p>
+<ul>
+<li>Usable as a CLI tool or as a library</li>
+<li>Supports SQLite, PostgreSQL, MySQL, MSSQL and Oracle databases (through gorp)</li>
+<li>Can embed migrations into your application</li>
+<li>Migrations are defined with SQL for full flexibility</li>
+<li>Atomic migrations</li>
+<li>Up/down migrations to allow rollback</li>
+<li>Supports multiple database types in one project</li>
+</ul>
+<h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a><a href="google.golang.org/gprc">gRPC</a></h2><p>Package grpc implements an RPC system called gRPC.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在github上有很多go库，这里作为一个介绍记录，便于以后查找&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="golang" scheme="http://yoursite.com/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
     <title>goglang入门配置记录</title>
     <link href="http://yoursite.com/2017/04/04/goglang%E5%85%A5%E9%97%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
     <id>http://yoursite.com/2017/04/04/goglang入门配置记录/</id>
     <published>2017-04-04T11:56:56.000Z</published>
-    <updated>2017-04-04T12:14:21.000Z</updated>
+    <updated>2017-04-06T12:51:23.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="2017-04-04"><a href="#2017-04-04" class="headerlink" title="2017-04-04"></a>2017-04-04</h2><h3 id="go-get-慢"><a href="#go-get-慢" class="headerlink" title="go get 慢"></a>go get 慢</h3><p>因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：<a href="http://golangtc.com/download/package" target="_blank" rel="external">下载第三方包</a></p>
 <a id="more"></a>
@@ -35,7 +70,7 @@
     </summary>
     
     
-      <category term="goglang" scheme="http://yoursite.com/tags/goglang/"/>
+      <category term="golang" scheme="http://yoursite.com/tags/golang/"/>
     
   </entry>
   

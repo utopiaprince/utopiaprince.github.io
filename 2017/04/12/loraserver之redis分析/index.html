@@ -3,18 +3,33 @@
 <head>
   <meta charset="utf-8">
   
-  <title>LoRaWAN协议之入网分析 | utopiaprince</title>
+  <title>loraserver之redis分析 | utopiaprince</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="网络为了参与LoRaWAN网络，每个终端设备必须被个性化和激活。终端设备的激活可以以2种方式实现。在部署或重置终端时通过空中激活(OTAA)，或通过个性化激活(ABP)，其中终端设备个性化和激活两个步骤，选择一个步骤完成。">
+  <meta name="description" content="loraserver在与gateway通信，数据的存储采用的是redis。
+启动redis在终端输入：1redis-server
+redis服务就启动了，不要关闭终端
+连接redis打开一个新终端，输入:1redis-cli -h [host] -p [port] -a [password]
+分别对应主机ip地址、端口号、密码
+分布式锁在loraserver的backend/gateway.go里">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LoRaWAN协议之入网分析">
-<meta property="og:url" content="http://yoursite.com/2017/01/17/LoRaWAN协议之入网分析/index.html">
+<meta property="og:title" content="loraserver之redis分析">
+<meta property="og:url" content="http://yoursite.com/2017/04/12/loraserver之redis分析/index.html">
 <meta property="og:site_name" content="utopiaprince">
-<meta property="og:description" content="网络为了参与LoRaWAN网络，每个终端设备必须被个性化和激活。终端设备的激活可以以2种方式实现。在部署或重置终端时通过空中激活(OTAA)，或通过个性化激活(ABP)，其中终端设备个性化和激活两个步骤，选择一个步骤完成。">
-<meta property="og:updated_time" content="2017-04-08T12:39:58.000Z">
+<meta property="og:description" content="loraserver在与gateway通信，数据的存储采用的是redis。
+启动redis在终端输入：1redis-server
+redis服务就启动了，不要关闭终端
+连接redis打开一个新终端，输入:1redis-cli -h [host] -p [port] -a [password]
+分别对应主机ip地址、端口号、密码
+分布式锁在loraserver的backend/gateway.go里">
+<meta property="og:updated_time" content="2017-04-12T09:00:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LoRaWAN协议之入网分析">
-<meta name="twitter:description" content="网络为了参与LoRaWAN网络，每个终端设备必须被个性化和激活。终端设备的激活可以以2种方式实现。在部署或重置终端时通过空中激活(OTAA)，或通过个性化激活(ABP)，其中终端设备个性化和激活两个步骤，选择一个步骤完成。">
+<meta name="twitter:title" content="loraserver之redis分析">
+<meta name="twitter:description" content="loraserver在与gateway通信，数据的存储采用的是redis。
+启动redis在终端输入：1redis-server
+redis服务就启动了，不要关闭终端
+连接redis打开一个新终端，输入:1redis-cli -h [host] -p [port] -a [password]
+分别对应主机ip地址、端口号、密码
+分布式锁在loraserver的backend/gateway.go里">
   
     <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
   
@@ -61,10 +76,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-LoRaWAN协议之入网分析" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-loraserver之redis分析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/17/LoRaWAN协议之入网分析/" class="article-date">
-  <time datetime="2017-01-17T02:19:55.000Z" itemprop="datePublished">2017-01-17</time>
+    <a href="/2017/04/12/loraserver之redis分析/" class="article-date">
+  <time datetime="2017-04-12T07:09:24.000Z" itemprop="datePublished">2017-04-12</time>
 </a>
     
   </div>
@@ -75,7 +90,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      LoRaWAN协议之入网分析
+      loraserver之redis分析
     </h1>
   
 
@@ -83,75 +98,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>为了参与LoRaWAN网络，每个终端设备必须被个性化和激活。终端设备的激活可以以2种方式实现。<br>在部署或重置终端时通过空中激活(OTAA)，或通过个性化激活(ABP)，其中终端设备个性化和激活两个步骤，选择一个步骤完成。</p>
-<a id="more"></a>
-<p>LoRaWAN网络中的key，ID，EUI关系，参考下表：</p>
-<table>
-<thead>
-<tr>
-<th>Mode</th>
-<th>ID/EUI</th>
-<th>Key</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ABP</td>
-<td>DevAddr</td>
-<td>NwkSKey, AppSKey</td>
-</tr>
-<tr>
-<td>OTAA</td>
-<td>AppEUI, DevEUI</td>
-<td>AppKey</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>DevAddr 设备节点的短地址，在数据通讯阶段，使用的是短地址。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>bits</th>
-<th>[31:25]</th>
-<th>[24:0]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DevAddr bits</td>
-<td>NwkID</td>
-<td>NwkAddr</td>
-</tr>
-</tbody>
-</table>
-<pre><code>- NwkID 网络标示，用来区分不同网络运营商的地域重叠网络地址问题，以及弥补漫游问题。
-- NwkAddr 网络地址，由网络管理者任意分配
-</code></pre><ul>
-<li>AppEUI 在IEEE EUI64地址空间中的全球应用程序ID唯一地标识终端设备的应用提供商。</li>
-<li>DevEUI 在IEEE EUI64地址空间中的全球终端ID唯一地标识终端设备。</li>
-<li>NwkSKey 用于服务器以及终端计算和校验MIC。它用于加密、解密MAC数据消息载荷。</li>
-<li>AppSKey 用于服务器以及终端加密、解密应用数据载荷。对应AES加密解密</li>
-<li>AppKey 特定于终端设备的AES-128应用key，由应用所有者分配给终端设备，一般由应用专用的根密钥导出。</li>
-</ul>
-<h3 id="ABP"><a href="#ABP" class="headerlink" title="ABP"></a>ABP</h3><p>在ABP模式下，DevAddr、NwkSKey以及AppSKey需要预先设置的。默认终端设备已经入网。</p>
-<h3 id="OTAA"><a href="#OTAA" class="headerlink" title="OTAA"></a>OTAA</h3><p>OTAA方式激活，终端设备需要与网络服务器之间进行入网流程交互，如果丢失会话信息，终端设备需要重新与网络服务器进行入网流程交互。入网流程如下：</p>
-<ol>
-<li>终端发送入网请求</li>
-<li>网关接收终端数据，转发给服务器</li>
-<li>服务器接收入网请求，同意入网，并把设备注册到服务器，建立DevEUI与DevAddr关系，生成通讯密钥，将通讯密钥发送给网关</li>
-<li>网关接收服务器数据，下发给终端</li>
-<li>终端设备接收入网应答，得到DevAddr, AppSKey, NwkSKey。</li>
-</ol>
+        <p>loraserver在与gateway通信，数据的存储采用的是redis。</p>
+<h2 id="启动redis"><a href="#启动redis" class="headerlink" title="启动redis"></a>启动redis</h2><p>在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-server</div></pre></td></tr></table></figure></p>
+<p>redis服务就启动了，不要关闭终端</p>
+<h2 id="连接redis"><a href="#连接redis" class="headerlink" title="连接redis"></a>连接redis</h2><p>打开一个新终端，输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h [host] -p [port] -a [password]</div></pre></td></tr></table></figure></p>
+<p>分别对应主机ip地址、端口号、密码</p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>在loraserver的backend/gateway.go里面，redis设置key用了分布式锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_, err := redis.String(redisConn.Do(&quot;SET&quot;, key, &quot;lock&quot;, &quot;PX&quot;, time, &quot;NX&quot;))</div></pre></td></tr></table></figure></p>
+<p>其实就是下面的命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set key lock NX PX time</div></pre></td></tr></table></figure></p>
+<p>这个命令的作用是在只有这个key不存在的时候才会设置这个key的值（NX选项的作用），超时时间time毫秒，这个key的值会设为“lock”，这个值必须在所有获取锁请求的客户端里保持唯一。<br><strong>终端在多个网关的覆盖情况下，mqtt所有的订阅者都会收到所有网关的上行数据，第一个接收者需要锁定他，这样其他接收者会忽视重复的消息</strong></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/17/LoRaWAN协议之入网分析/" data-id="cj1f2yq0e0002mbd5nocpfgd5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/12/loraserver之redis分析/" data-id="cj1f2yq0v000embd5e3ziilch" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li></ul>
 
     </footer>
   </div>
@@ -159,19 +121,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/01/18/git-submodule体会/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          git-submodule体会
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/01/12/awesome-iot/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/04/12/loraserver之sql分析/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">awesome-iot</div>
+      <div class="article-nav-title">loraserver之sql分析</div>
     </a>
   
 </nav>

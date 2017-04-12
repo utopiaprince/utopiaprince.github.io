@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-08T12:34:22.000Z</updated>
+  <updated>2017-04-12T09:00:26.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,74 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>loraserver之redis分析</title>
+    <link href="http://yoursite.com/2017/04/12/loraserver%E4%B9%8Bredis%E5%88%86%E6%9E%90/"/>
+    <id>http://yoursite.com/2017/04/12/loraserver之redis分析/</id>
+    <published>2017-04-12T07:09:24.000Z</published>
+    <updated>2017-04-12T09:00:26.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>loraserver在与gateway通信，数据的存储采用的是redis。</p>
+<h2 id="启动redis"><a href="#启动redis" class="headerlink" title="启动redis"></a>启动redis</h2><p>在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-server</div></pre></td></tr></table></figure></p>
+<p>redis服务就启动了，不要关闭终端</p>
+<h2 id="连接redis"><a href="#连接redis" class="headerlink" title="连接redis"></a>连接redis</h2><p>打开一个新终端，输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h [host] -p [port] -a [password]</div></pre></td></tr></table></figure></p>
+<p>分别对应主机ip地址、端口号、密码</p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>在loraserver的backend/gateway.go里面，redis设置key用了分布式锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_, err := redis.String(redisConn.Do(&quot;SET&quot;, key, &quot;lock&quot;, &quot;PX&quot;, time, &quot;NX&quot;))</div></pre></td></tr></table></figure></p>
+<p>其实就是下面的命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set key lock NX PX time</div></pre></td></tr></table></figure></p>
+<p>这个命令的作用是在只有这个key不存在的时候才会设置这个key的值（NX选项的作用），超时时间time毫秒，这个key的值会设为“lock”，这个值必须在所有获取锁请求的客户端里保持唯一。<br><strong>终端在多个网关的覆盖情况下，mqtt所有的订阅者都会收到所有网关的上行数据，第一个接收者需要锁定他，这样其他接收者会忽视重复的消息</strong></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;loraserver在与gateway通信，数据的存储采用的是redis。&lt;/p&gt;
+&lt;h2 id=&quot;启动redis&quot;&gt;&lt;a href=&quot;#启动redis&quot; class=&quot;headerlink&quot; title=&quot;启动redis&quot;&gt;&lt;/a&gt;启动redis&lt;/h2&gt;&lt;p&gt;在终端输入
+    
+    </summary>
+    
+    
+      <category term="LoRaWAN" scheme="http://yoursite.com/tags/LoRaWAN/"/>
+    
+      <category term="SQL" scheme="http://yoursite.com/tags/SQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>loraserver之sql分析</title>
+    <link href="http://yoursite.com/2017/04/12/loraserver%E4%B9%8Bsql%E5%88%86%E6%9E%90/"/>
+    <id>http://yoursite.com/2017/04/12/loraserver之sql分析/</id>
+    <published>2017-04-12T02:53:52.000Z</published>
+    <updated>2017-04-12T05:50:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>loraserver的sql采用的postgres，他的sql migrations部分很少，跟着一起来分析下</p>
+<a id="more"></a>
+<h2 id="启动postgres"><a href="#启动postgres" class="headerlink" title="启动postgres"></a>启动postgres</h2><p>如果psql提示如下错误：<br><strong>“／var/run/postgresql/.s.PGSQL.5432”上准备接受联接?</strong><br>那么因该是postgres未启动，输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service postgresql restart</div></pre></td></tr></table></figure></p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create index idx_gateway_name on gateway (name);</div></pre></td></tr></table></figure>
+<p>在gateway表的name列上创建索引，加速搜索/查询。</p>
+<h2 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">create table gateway_stats &#123;</div><div class="line">    mac bytea not null references gateway on delete cascade,</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>references：gateway_stats的mac与gateway的mac建立的主、外键关系。</li>
+<li>on delete cascade：指定如果试图删除一行，而改行的键被其他表的现有行中的外键引用，则也将删除所有包含那些外间的行</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;loraserver的sql采用的postgres，他的sql migrations部分很少，跟着一起来分析下&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="LoRaWAN" scheme="http://yoursite.com/tags/LoRaWAN/"/>
+    
+      <category term="SQL" scheme="http://yoursite.com/tags/SQL/"/>
+    
+  </entry>
+  
+  <entry>
     <title>github上go库说明记录</title>
     <link href="http://yoursite.com/2017/04/06/github%E4%B8%8Ago%E5%BA%93%E8%AF%B4%E6%98%8E%E8%AE%B0%E5%BD%95/"/>
     <id>http://yoursite.com/2017/04/06/github上go库说明记录/</id>
     <published>2017-04-06T12:51:10.000Z</published>
-    <updated>2017-04-08T12:34:22.000Z</updated>
+    <updated>2017-04-12T02:52:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>在github上有很多go库，这里作为一个介绍记录，便于以后查找</p>
 <a id="more"></a>
@@ -37,6 +100,7 @@
 <li>Supports multiple database types in one project</li>
 </ul>
 <h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a><a href="google.golang.org/gprc">gRPC</a></h2><p>Package grpc implements an RPC system called gRPC.</p>
+<h2 id="go-bindata"><a href="#go-bindata" class="headerlink" title="go-bindata"></a><a href="github.com/jteeuwen/go-bindata">go-bindata</a></h2><p>a small utility which generates Go code from any file. Useful for embedding binary data in a Go program.</p>
 ]]></content>
     
     <summary type="html">
@@ -51,11 +115,11 @@
   </entry>
   
   <entry>
-    <title>goglang入门配置记录</title>
-    <link href="http://yoursite.com/2017/04/04/goglang%E5%85%A5%E9%97%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
-    <id>http://yoursite.com/2017/04/04/goglang入门配置记录/</id>
+    <title>golang入门配置记录</title>
+    <link href="http://yoursite.com/2017/04/04/golang%E5%85%A5%E9%97%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
+    <id>http://yoursite.com/2017/04/04/golang入门配置记录/</id>
     <published>2017-04-04T11:56:56.000Z</published>
-    <updated>2017-04-06T12:51:23.000Z</updated>
+    <updated>2017-04-10T13:32:26.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="2017-04-04"><a href="#2017-04-04" class="headerlink" title="2017-04-04"></a>2017-04-04</h2><h3 id="go-get-慢"><a href="#go-get-慢" class="headerlink" title="go get 慢"></a>go get 慢</h3><p>因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：<a href="http://golangtc.com/download/package" target="_blank" rel="external">下载第三方包</a></p>
 <a id="more"></a>
@@ -79,7 +143,7 @@
     <link href="http://yoursite.com/2017/03/15/jenkins%E4%B8%8Egitlab%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
     <id>http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/</id>
     <published>2017-03-15T02:35:08.000Z</published>
-    <updated>2017-03-15T02:53:22.000Z</updated>
+    <updated>2017-04-10T13:29:31.000Z</updated>
     
     <content type="html"><![CDATA[<p>在jenkins与gitlab配置过程中，有些具体问题，记录下来</p>
 <a id="more"></a>
@@ -92,6 +156,7 @@
 <pre><code>sudo iptables -t nat -A OUTPUT -p tcp --dst &lt;外网ip&gt; --dport &lt;gitlab外网端口&gt; -j REDIRECT
 sudo /sbin/iptables-save
 </code></pre><p>命令输入以后，以后对gitlab的访问ip都映射到localhost。同时保存了iptables配置，防止服务器重启以后在此输入。</p>
+<p><strong>如果是局域网内的多台服务器之间通信，用外网ip访问需要主路由器进行iptables进行地址转发，如果是用域名的方式，可以在局域网内修改host的方式完成。</strong></p>
 ]]></content>
     
     <summary type="html">
@@ -108,7 +173,7 @@ sudo /sbin/iptables-save
     <link href="http://yoursite.com/2017/03/08/2017%E5%B9%B4%E6%88%90%E9%95%BF%E8%AE%A1%E5%88%92/"/>
     <id>http://yoursite.com/2017/03/08/2017年成长计划/</id>
     <published>2017-03-08T06:38:32.000Z</published>
-    <updated>2017-03-09T07:21:04.000Z</updated>
+    <updated>2017-04-10T13:25:41.000Z</updated>
     
     <content type="html"><![CDATA[<p>进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。</p>
 <a id="more"></a>
@@ -121,13 +186,14 @@ sudo /sbin/iptables-save
 <h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><p>嵌入式sdk方面以无线协议做为基础，已经实现了与云的通信。个人对服务器方面的了解比较少，对于系统整体架构认知还有所欠缺，缺乏系统设计能力。在这一年里需要做到：</p>
 <ul>
 <li>以LoRaWAN为案例，自行搭建私有服务器，实现整套LPWA网络系统架设。</li>
+<li>每天查看loraserver,lora-app-server,gateway仓库的issue.</li>
 </ul>
 <h2 id="文档能力"><a href="#文档能力" class="headerlink" title="文档能力"></a>文档能力</h2><p>软件配套的文档写的太少，对于后续的开发者以及自己都是一个障碍，后续软件开发要重视起来，每个模块、系统文档工作都要配备好</p>
 <h2 id="演讲能力"><a href="#演讲能力" class="headerlink" title="演讲能力"></a>演讲能力</h2><p>计划在这一年里面针对sdk，架构方面做3次分享，把一年内的成果展示出来</p>
 <ul>
-<li>SDK PPT分享</li>
+<li><del>SDK PPT分享</del></li>
 <li>LoRaWAN系统架构分享</li>
-<li>软件开发测试分享</li>
+<li><del>软件开发测试分享</del></li>
 </ul>
 ]]></content>
     

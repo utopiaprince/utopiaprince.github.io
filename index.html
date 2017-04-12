@@ -59,6 +59,95 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-loraserver之redis分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/12/loraserver之redis分析/" class="article-date">
+  <time datetime="2017-04-12T07:09:24.000Z" itemprop="datePublished">2017-04-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/12/loraserver之redis分析/">loraserver之redis分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>loraserver在与gateway通信，数据的存储采用的是redis。</p>
+<h2 id="启动redis"><a href="#启动redis" class="headerlink" title="启动redis"></a>启动redis</h2><p>在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-server</div></pre></td></tr></table></figure></p>
+<p>redis服务就启动了，不要关闭终端</p>
+<h2 id="连接redis"><a href="#连接redis" class="headerlink" title="连接redis"></a>连接redis</h2><p>打开一个新终端，输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h [host] -p [port] -a [password]</div></pre></td></tr></table></figure></p>
+<p>分别对应主机ip地址、端口号、密码</p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>在loraserver的backend/gateway.go里面，redis设置key用了分布式锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_, err := redis.String(redisConn.Do(&quot;SET&quot;, key, &quot;lock&quot;, &quot;PX&quot;, time, &quot;NX&quot;))</div></pre></td></tr></table></figure></p>
+<p>其实就是下面的命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set key lock NX PX time</div></pre></td></tr></table></figure></p>
+<p>这个命令的作用是在只有这个key不存在的时候才会设置这个key的值（NX选项的作用），超时时间time毫秒，这个key的值会设为“lock”，这个值必须在所有获取锁请求的客户端里保持唯一。<br><strong>终端在多个网关的覆盖情况下，mqtt所有的订阅者都会收到所有网关的上行数据，第一个接收者需要锁定他，这样其他接收者会忽视重复的消息</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/12/loraserver之redis分析/" data-id="cj1f2yq0v000embd5e3ziilch" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-loraserver之sql分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/12/loraserver之sql分析/" class="article-date">
+  <time datetime="2017-04-12T02:53:52.000Z" itemprop="datePublished">2017-04-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/12/loraserver之sql分析/">loraserver之sql分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>loraserver的sql采用的postgres，他的sql migrations部分很少，跟着一起来分析下</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/12/loraserver之sql分析/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/12/loraserver之sql分析/" data-id="cj1f2yq10000imbd51768t48x" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-github上go库说明记录" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/06/github上go库说明记录/" class="article-date">
@@ -90,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/06/github上go库说明记录/" data-id="cj198wxh600058x5atooj43l9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/06/github上go库说明记录/" data-id="cj1f2yq0u000dmbd589z8v6a1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -102,9 +191,9 @@
 
 
   
-    <article id="post-goglang入门配置记录" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-golang入门配置记录" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/04/04/goglang入门配置记录/" class="article-date">
+    <a href="/2017/04/04/golang入门配置记录/" class="article-date">
   <time datetime="2017-04-04T11:56:56.000Z" itemprop="datePublished">2017-04-04</time>
 </a>
     
@@ -116,7 +205,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/04/goglang入门配置记录/">goglang入门配置记录</a>
+      <a class="article-title" href="/2017/04/04/golang入门配置记录/">golang入门配置记录</a>
     </h1>
   
 
@@ -127,13 +216,13 @@
         <h2 id="2017-04-04"><a href="#2017-04-04" class="headerlink" title="2017-04-04"></a>2017-04-04</h2><h3 id="go-get-慢"><a href="#go-get-慢" class="headerlink" title="go get 慢"></a>go get 慢</h3><p>因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：<a href="http://golangtc.com/download/package">下载第三方包</a></p>
         
           <p class="article-more-link">
-            <a href="/2017/04/04/goglang入门配置记录/#more">Read More</a>
+            <a href="/2017/04/04/golang入门配置记录/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/04/goglang入门配置记录/" data-id="cj198wxh700068x5a9tz5bj5p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/04/golang入门配置记录/" data-id="cj1f2yq0k0005mbd5ov7kgwf2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -176,7 +265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj198wxhl000e8x5akl6bgkjr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj1f2yq0y000gmbd54uwjtuhw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -217,7 +306,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/08/2017年成长计划/" data-id="cj198wxgr00008x5adkswihfw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/08/2017年成长计划/" data-id="cj1f2yq070000mbd5ybiba7rq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -258,7 +347,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/" data-id="cj198wxgz00028x5aa7ivn052" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/" data-id="cj1f2yq0b0001mbd5rir5u3tw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li></ul>
@@ -301,7 +390,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/10/hexo引用站内文章链接/" data-id="cj198wxhk000d8x5ax4k6h3li" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/10/hexo引用站内文章链接/" data-id="cj1f2yq0t000ambd5rrpu5zi3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -342,7 +431,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/18/git-submodule体会/" data-id="cj198wxh500048x5a2t3gh2ng" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/18/git-submodule体会/" data-id="cj1f2yq0s0009mbd5xp4bw07z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
@@ -385,7 +474,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/17/LoRaWAN协议之入网分析/" data-id="cj198wxgw00018x5abjg28znx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/17/LoRaWAN协议之入网分析/" data-id="cj1f2yq0e0002mbd5nocpfgd5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li></ul>
@@ -397,94 +486,12 @@
 
 
   
-    <article id="post-awesome-iot" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/12/awesome-iot/" class="article-date">
-  <time datetime="2017-01-12T05:09:50.000Z" itemprop="datePublished">2017-01-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/12/awesome-iot/">awesome-iot</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一份物联网项目与资源的整理清单。</p>
-<blockquote>
-<p> 物联网是新一代信息技术的重要组成部分，其英文名称是：“The Internet of things”。顾名思义，物联网就是物物相连的互联网。这有两层意思：其一，物联网的核心和基础仍然是互联网，是在互联网基础上的延伸和扩展的网络；其二，其用户端延伸和扩展到了任何物品与物品之间，进行信息交换和通信 也就是物物相息。物联网就是“物物相连的互联网”。</p>
-</blockquote>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/12/awesome-iot/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/12/awesome-iot/" data-id="cj198wxhi00098x5ap7mcem7u" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iot/">iot</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
 
 
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/12/hello-world/" class="article-date">
-  <time datetime="2017-01-12T03:32:59.000Z" itemprop="datePublished">2017-01-12</time>
-</a>
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/12/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/12/hello-world/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/12/hello-world/" data-id="cj198wxhj000a8x5a4uqjflzv" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -497,7 +504,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li></ul>
     </div>
   </div>
 
@@ -507,7 +514,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a>
+      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/SQL/" style="font-size: 15px;">SQL</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a>
     </div>
   </div>
 
@@ -529,23 +536,23 @@
       <ul>
         
           <li>
+            <a href="/2017/04/12/loraserver之redis分析/">loraserver之redis分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/12/loraserver之sql分析/">loraserver之sql分析</a>
+          </li>
+        
+          <li>
             <a href="/2017/04/06/github上go库说明记录/">github上go库说明记录</a>
           </li>
         
           <li>
-            <a href="/2017/04/04/goglang入门配置记录/">goglang入门配置记录</a>
+            <a href="/2017/04/04/golang入门配置记录/">golang入门配置记录</a>
           </li>
         
           <li>
             <a href="/2017/03/15/jenkins与gitlab配置记录/">jenkins与gitlab配置记录</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/08/2017年成长计划/">2017年成长计划</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/10/LoRaWAN协议之添加频段支持/">LoRaWAN协议之添加频段支持</a>
           </li>
         
       </ul>

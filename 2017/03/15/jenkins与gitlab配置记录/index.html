@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/index.html">
 <meta property="og:site_name" content="utopiaprince">
 <meta property="og:description" content="在jenkins与gitlab配置过程中，有些具体问题，记录下来">
-<meta property="og:updated_time" content="2017-03-15T02:53:22.000Z">
+<meta property="og:updated_time" content="2017-04-10T13:29:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jenkins与gitlab配置记录">
 <meta name="twitter:description" content="在jenkins与gitlab配置过程中，有些具体问题，记录下来">
@@ -94,11 +94,12 @@
 <pre><code>sudo iptables -t nat -A OUTPUT -p tcp --dst &lt;外网ip&gt; --dport &lt;gitlab外网端口&gt; -j REDIRECT
 sudo /sbin/iptables-save
 </code></pre><p>命令输入以后，以后对gitlab的访问ip都映射到localhost。同时保存了iptables配置，防止服务器重启以后在此输入。</p>
+<p><strong>如果是局域网内的多台服务器之间通信，用外网ip访问需要主路由器进行iptables进行地址转发，如果是用域名的方式，可以在局域网内修改host的方式完成。</strong></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj198wxhl000e8x5akl6bgkjr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj1f2yq0y000gmbd54uwjtuhw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -107,11 +108,11 @@ sudo /sbin/iptables-save
     
 <nav id="article-nav">
   
-    <a href="/2017/04/04/goglang入门配置记录/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/04/04/golang入门配置记录/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          goglang入门配置记录
+          golang入门配置记录
         
       </div>
     </a>
@@ -138,7 +139,7 @@ sudo /sbin/iptables-save
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li></ul>
     </div>
   </div>
 
@@ -148,7 +149,7 @@ sudo /sbin/iptables-save
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a>
+      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/SQL/" style="font-size: 15px;">SQL</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a>
     </div>
   </div>
 
@@ -170,23 +171,23 @@ sudo /sbin/iptables-save
       <ul>
         
           <li>
+            <a href="/2017/04/12/loraserver之redis分析/">loraserver之redis分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/12/loraserver之sql分析/">loraserver之sql分析</a>
+          </li>
+        
+          <li>
             <a href="/2017/04/06/github上go库说明记录/">github上go库说明记录</a>
           </li>
         
           <li>
-            <a href="/2017/04/04/goglang入门配置记录/">goglang入门配置记录</a>
+            <a href="/2017/04/04/golang入门配置记录/">golang入门配置记录</a>
           </li>
         
           <li>
             <a href="/2017/03/15/jenkins与gitlab配置记录/">jenkins与gitlab配置记录</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/08/2017年成长计划/">2017年成长计划</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/10/LoRaWAN协议之添加频段支持/">LoRaWAN协议之添加频段支持</a>
           </li>
         
       </ul>

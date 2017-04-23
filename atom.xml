@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-12T09:00:26.000Z</updated>
+  <updated>2017-04-23T15:05:41.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,13 +16,43 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>golang之interface</title>
+    <link href="http://yoursite.com/2017/04/23/golang%E4%B9%8Binterface/"/>
+    <id>http://yoursite.com/2017/04/23/golang之interface/</id>
+    <published>2017-04-23T14:58:14.000Z</published>
+    <updated>2017-04-23T15:05:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>go的interface很特别，所有的对象都是interface的实现，所以如果想表达一个任意类型，可以用interface{}来表示。比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func myFunc(src interface&#123;&#125;) &#123;</div><div class="line">    // 在这里src就是一个任意类型</div><div class="line">    switch src.type &#123;</div><div class="line">    case string:</div><div class="line"></div><div class="line">    case int:</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这里src可以是任意类型，可以在函数内部通过src.type来进行类型判定。<br>interface不光可以表示自定义类型，同时也可以是一组方法的集合。他有两个特点：</p>
+<ul>
+<li>自定义类型</li>
+<li>没有数据成员，只有方法</li>
+</ul>
+<p>接口是抽象的，所以不能被实例化。但是可以创建一个类型为接口的变量，它可以被赋值为任何满足该接口类型的实际类型的值。这句话很拗口，我们继续往下看。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type Payload interface &#123;</div><div class="line">    MarshalBinary() (data []byte, err error)</div><div class="line">&#125;</div><div class="line"></div><div class="line">type DataPayload struct &#123;</div><div class="line">    Bytes []byte</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MarshalBinary marshals the object in binary form.</div><div class="line">func (p DataPayload) MarshalBinary() ([]byte, error) &#123;</div><div class="line">    return p.Bytes, nil</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这里类型<strong>DataPayload</strong>实现了接口<strong>Payload</strong>的方法，那么类型<strong>DataPayload</strong>就是<strong>Payload</strong>的实现，该类型的值可以赋给该接口的值。<br>所以我们就可以回头看开始的例子，<strong>任何类型的值都可以赋值给空接口interface{}</strong>。</p>
+<blockquote>
+<p>接口的特性是Go语言支持鸭子类型的基础，即“如果它走起来像鸭子，叫起来像鸭子（实现了接口要的方法），它就是一只鸭子（可以被赋值给接口的值）”。凭借接口机制和鸭子类型，Go语言提供了一种有利于类、继承、模板之外的更加灵活强大的选择。只要类型T的公开方法完全满足接口I的要求，就可以把类型T的对象用在需要接口I的地方。这种做法的学名叫做”Structural Typing“。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;go的interface很特别，所有的对象都是interface的实现，所以如果想表达一个任意类型，可以用interface{}来表示。比如：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>loraserver之redis分析</title>
     <link href="http://yoursite.com/2017/04/12/loraserver%E4%B9%8Bredis%E5%88%86%E6%9E%90/"/>
     <id>http://yoursite.com/2017/04/12/loraserver之redis分析/</id>
     <published>2017-04-12T07:09:24.000Z</published>
-    <updated>2017-04-12T09:00:26.000Z</updated>
+    <updated>2017-04-23T10:32:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>loraserver在与gateway通信，数据的存储采用的是redis。</p>
+<a id="more"></a>
 <h2 id="启动redis"><a href="#启动redis" class="headerlink" title="启动redis"></a>启动redis</h2><p>在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-server</div></pre></td></tr></table></figure></p>
 <p>redis服务就启动了，不要关闭终端</p>
 <h2 id="连接redis"><a href="#连接redis" class="headerlink" title="连接redis"></a>连接redis</h2><p>打开一个新终端，输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h [host] -p [port] -a [password]</div></pre></td></tr></table></figure></p>
@@ -35,7 +65,6 @@
     <summary type="html">
     
       &lt;p&gt;loraserver在与gateway通信，数据的存储采用的是redis。&lt;/p&gt;
-&lt;h2 id=&quot;启动redis&quot;&gt;&lt;a href=&quot;#启动redis&quot; class=&quot;headerlink&quot; title=&quot;启动redis&quot;&gt;&lt;/a&gt;启动redis&lt;/h2&gt;&lt;p&gt;在终端输入
     
     </summary>
     
@@ -115,11 +144,11 @@
   </entry>
   
   <entry>
-    <title>golang入门配置记录</title>
-    <link href="http://yoursite.com/2017/04/04/golang%E5%85%A5%E9%97%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
-    <id>http://yoursite.com/2017/04/04/golang入门配置记录/</id>
+    <title>golang之配置记录</title>
+    <link href="http://yoursite.com/2017/04/04/golang%E4%B9%8B%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"/>
+    <id>http://yoursite.com/2017/04/04/golang之配置记录/</id>
     <published>2017-04-04T11:56:56.000Z</published>
-    <updated>2017-04-10T13:32:26.000Z</updated>
+    <updated>2017-04-23T15:01:32.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="2017-04-04"><a href="#2017-04-04" class="headerlink" title="2017-04-04"></a>2017-04-04</h2><h3 id="go-get-慢"><a href="#go-get-慢" class="headerlink" title="go get 慢"></a>go get 慢</h3><p>因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：<a href="http://golangtc.com/download/package" target="_blank" rel="external">下载第三方包</a></p>
 <a id="more"></a>
@@ -777,34 +806,6 @@ sudo /sbin/iptables-save
     
     
       <category term="iot" scheme="http://yoursite.com/tags/iot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/01/12/hello-world/"/>
-    <id>http://yoursite.com/2017/01/12/hello-world/</id>
-    <published>2017-01-12T03:32:59.000Z</published>
-    <updated>2017-01-18T03:21:51.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<a id="more"></a>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-    
-    </summary>
-    
     
   </entry>
   

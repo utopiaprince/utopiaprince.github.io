@@ -48,7 +48,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -58,6 +58,53 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-golang之interface" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/23/golang之interface/" class="article-date">
+  <time datetime="2017-04-23T14:58:14.000Z" itemprop="datePublished">2017-04-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/23/golang之interface/">golang之interface</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>go的interface很特别，所有的对象都是interface的实现，所以如果想表达一个任意类型，可以用interface{}来表示。比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func myFunc(src interface&#123;&#125;) &#123;</div><div class="line">    // 在这里src就是一个任意类型</div><div class="line">    switch src.type &#123;</div><div class="line">    case string:</div><div class="line"></div><div class="line">    case int:</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这里src可以是任意类型，可以在函数内部通过src.type来进行类型判定。<br>interface不光可以表示自定义类型，同时也可以是一组方法的集合。他有两个特点：</p>
+<ul>
+<li>自定义类型</li>
+<li>没有数据成员，只有方法</li>
+</ul>
+<p>接口是抽象的，所以不能被实例化。但是可以创建一个类型为接口的变量，它可以被赋值为任何满足该接口类型的实际类型的值。这句话很拗口，我们继续往下看。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type Payload interface &#123;</div><div class="line">    MarshalBinary() (data []byte, err error)</div><div class="line">&#125;</div><div class="line"></div><div class="line">type DataPayload struct &#123;</div><div class="line">    Bytes []byte</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MarshalBinary marshals the object in binary form.</div><div class="line">func (p DataPayload) MarshalBinary() ([]byte, error) &#123;</div><div class="line">    return p.Bytes, nil</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这里类型<strong>DataPayload</strong>实现了接口<strong>Payload</strong>的方法，那么类型<strong>DataPayload</strong>就是<strong>Payload</strong>的实现，该类型的值可以赋给该接口的值。<br>所以我们就可以回头看开始的例子，<strong>任何类型的值都可以赋值给空接口interface{}</strong>。</p>
+<blockquote>
+<p>接口的特性是Go语言支持鸭子类型的基础，即“如果它走起来像鸭子，叫起来像鸭子（实现了接口要的方法），它就是一只鸭子（可以被赋值给接口的值）”。凭借接口机制和鸭子类型，Go语言提供了一种有利于类、继承、模板之外的更加灵活强大的选择。只要类型T的公开方法完全满足接口I的要求，就可以把类型T的对象用在需要接口I的地方。这种做法的学名叫做”Structural Typing“。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/23/golang之interface/" data-id="cj1utqo5j0009iad5ijkanfsm" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-loraserver之redis分析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -82,18 +129,15 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>loraserver在与gateway通信，数据的存储采用的是redis。</p>
-<h2 id="启动redis"><a href="#启动redis" class="headerlink" title="启动redis"></a>启动redis</h2><p>在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-server</div></pre></td></tr></table></figure></p>
-<p>redis服务就启动了，不要关闭终端</p>
-<h2 id="连接redis"><a href="#连接redis" class="headerlink" title="连接redis"></a>连接redis</h2><p>打开一个新终端，输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h [host] -p [port] -a [password]</div></pre></td></tr></table></figure></p>
-<p>分别对应主机ip地址、端口号、密码</p>
-<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>在loraserver的backend/gateway.go里面，redis设置key用了分布式锁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_, err := redis.String(redisConn.Do(&quot;SET&quot;, key, &quot;lock&quot;, &quot;PX&quot;, time, &quot;NX&quot;))</div></pre></td></tr></table></figure></p>
-<p>其实就是下面的命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set key lock NX PX time</div></pre></td></tr></table></figure></p>
-<p>这个命令的作用是在只有这个key不存在的时候才会设置这个key的值（NX选项的作用），超时时间time毫秒，这个key的值会设为“lock”，这个值必须在所有获取锁请求的客户端里保持唯一。<br><strong>终端在多个网关的覆盖情况下，mqtt所有的订阅者都会收到所有网关的上行数据，第一个接收者需要锁定他，这样其他接收者会忽视重复的消息</strong></p>
-
+        
+          <p class="article-more-link">
+            <a href="/2017/04/12/loraserver之redis分析/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/12/loraserver之redis分析/" data-id="cj1f2yq0v000embd5e3ziilch" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/12/loraserver之redis分析/" data-id="cj1utqo5r000giad573o496xv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li></ul>
@@ -136,7 +180,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/12/loraserver之sql分析/" data-id="cj1f2yq10000imbd51768t48x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/12/loraserver之sql分析/" data-id="cj1utqo5t000iiad5b1kroumq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li></ul>
@@ -179,7 +223,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/06/github上go库说明记录/" data-id="cj1f2yq0u000dmbd589z8v6a1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/06/github上go库说明记录/" data-id="cj1utqo540005iad5izy82gti" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -191,9 +235,9 @@
 
 
   
-    <article id="post-golang入门配置记录" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-golang之配置记录" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/04/04/golang入门配置记录/" class="article-date">
+    <a href="/2017/04/04/golang之配置记录/" class="article-date">
   <time datetime="2017-04-04T11:56:56.000Z" itemprop="datePublished">2017-04-04</time>
 </a>
     
@@ -205,7 +249,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/04/golang入门配置记录/">golang入门配置记录</a>
+      <a class="article-title" href="/2017/04/04/golang之配置记录/">golang之配置记录</a>
     </h1>
   
 
@@ -216,13 +260,13 @@
         <h2 id="2017-04-04"><a href="#2017-04-04" class="headerlink" title="2017-04-04"></a>2017-04-04</h2><h3 id="go-get-慢"><a href="#go-get-慢" class="headerlink" title="go get 慢"></a>go get 慢</h3><p>因为gfw的网络问题，go get获取资源很慢，这里有个解决方案：<a href="http://golangtc.com/download/package">下载第三方包</a></p>
         
           <p class="article-more-link">
-            <a href="/2017/04/04/golang入门配置记录/#more">Read More</a>
+            <a href="/2017/04/04/golang之配置记录/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/04/golang入门配置记录/" data-id="cj1f2yq0k0005mbd5ov7kgwf2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/04/golang之配置记录/" data-id="cj1utqo5l000aiad5aiwbw1er" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -265,7 +309,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj1f2yq0y000gmbd54uwjtuhw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/15/jenkins与gitlab配置记录/" data-id="cj1utqo5o000eiad5koxuxvzz" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -306,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/08/2017年成长计划/" data-id="cj1f2yq070000mbd5ybiba7rq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/08/2017年成长计划/" data-id="cj1utqo4i0000iad5wcw9w9ep" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -347,7 +391,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/" data-id="cj1f2yq0b0001mbd5rir5u3tw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/10/LoRaWAN协议之添加频段支持/" data-id="cj1utqo4u0002iad55m2gefnw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li></ul>
@@ -390,7 +434,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/10/hexo引用站内文章链接/" data-id="cj1f2yq0t000ambd5rrpu5zi3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/10/hexo引用站内文章链接/" data-id="cj1utqo5m000diad52boi71bw" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -431,53 +475,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/18/git-submodule体会/" data-id="cj1f2yq0s0009mbd5xp4bw07z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/18/git-submodule体会/" data-id="cj1utqo520004iad5o7zznq37" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-LoRaWAN协议之入网分析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/17/LoRaWAN协议之入网分析/" class="article-date">
-  <time datetime="2017-01-17T02:19:55.000Z" itemprop="datePublished">2017-01-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/17/LoRaWAN协议之入网分析/">LoRaWAN协议之入网分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>为了参与LoRaWAN网络，每个终端设备必须被个性化和激活。终端设备的激活可以以2种方式实现。<br>在部署或重置终端时通过空中激活(OTAA)，或通过个性化激活(ABP)，其中终端设备个性化和激活两个步骤，选择一个步骤完成。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/17/LoRaWAN协议之入网分析/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/17/LoRaWAN协议之入网分析/" data-id="cj1f2yq0e0002mbd5nocpfgd5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li></ul>
 
     </footer>
   </div>
@@ -490,7 +491,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -521,7 +522,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
     </div>
@@ -531,9 +532,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/04/23/golang之interface/">golang之interface</a>
+          </li>
         
           <li>
             <a href="/2017/04/12/loraserver之redis分析/">loraserver之redis分析</a>
@@ -548,11 +553,7 @@
           </li>
         
           <li>
-            <a href="/2017/04/04/golang入门配置记录/">golang入门配置记录</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/15/jenkins与gitlab配置记录/">jenkins与gitlab配置记录</a>
+            <a href="/2017/04/04/golang之配置记录/">golang之配置记录</a>
           </li>
         
       </ul>

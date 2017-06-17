@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-23T15:06:54.000Z</updated>
+  <updated>2017-06-17T01:07:51.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,98 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>stm32与at91sam9x35的can通信</title>
+    <link href="http://yoursite.com/2017/06/17/stm32%E4%B8%8Eat91sam9x35%E7%9A%84can%E9%80%9A%E4%BF%A1/"/>
+    <id>http://yoursite.com/2017/06/17/stm32与at91sam9x35的can通信/</id>
+    <published>2017-06-17T00:28:24.000Z</published>
+    <updated>2017-06-17T01:07:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>stm32之间的CAN通信，有自带的HAL库，实现起来还是很方便的。at91(at91sam9x35简称)的linux上面的CAN驱动，从2.6.20开始合并到了SocketCAN，采用了套接字的方式编程，与之前有很大区别。</p>
+<a id="more"></a>
+<h2 id="SocketCAN"><a href="#SocketCAN" class="headerlink" title="SocketCAN"></a>SocketCAN</h2><p>首先我们查看一下at91的can设备，输入<strong>ifconfig -a</strong>，查看信息找到<strong>canX</strong>，默认at91只开启了can0（这里是逻辑设备，实际硬件开启的是can1）。</p>
+<h3 id="启动-关闭can"><a href="#启动-关闭can" class="headerlink" title="启动/关闭can"></a>启动/关闭can</h3><p>在进行配置之前，都需要关闭can，配置完成以后再次开启。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ip link set down can0 // close</div><div class="line">$ip link set up can0   // start</div></pre></td></tr></table></figure></p>
+<h3 id="查看当前can信息"><a href="#查看当前can信息" class="headerlink" title="查看当前can信息"></a>查看当前can信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ip -details link show can0</div><div class="line">can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10 link/can</div><div class="line">      can &lt;TRIPLE-SAMPLING&gt; state ERROR-ACTIVE restart-ms 100</div><div class="line">      bitrate 400100 sample_point 0.875</div><div class="line">      tq 416 prop-seg 1 phase-seg1 2 phase-seg2 2 sjw 1</div><div class="line">      sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1</div><div class="line">      clock 133333333</div></pre></td></tr></table></figure>
+<h3 id="设置can的波特率"><a href="#设置can的波特率" class="headerlink" title="设置can的波特率"></a>设置can的波特率</h3><p>设置波特率有2种方式，一种是直接修改bitrate，另外一种是修改计算参数。</p>
+<h4 id="修改bitrate"><a href="#修改bitrate" class="headerlink" title="修改bitrate"></a>修改bitrate</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip link set can0 type can bitrate &lt;band&gt;</div></pre></td></tr></table></figure>
+<p>这里band修改成想要的波特率。这条指令大部分的时候都是正常工作的，但是在一些少见的波特率和时钟频率，可能支持不好，误码率高。修改完以后可以用查看can指令查看。</p>
+<h4 id="修改计算参数"><a href="#修改计算参数" class="headerlink" title="修改计算参数"></a>修改计算参数</h4><p>at91的datasheet里面的can章节，介绍了bitrate计算公式，我们可以算出tq、pro、seg1、seg2、sjw的具体参数，然后用指令输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ip link set can0 type can tq 125 prop-seg 6  phase-seg1 7 phase-seg2 2 sjw 1</div></pre></td></tr></table></figure></p>
+<p>设置完以后，可以用can查看指令，查看配置以后的bitrate。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>具体的SocketCAN编程，<a href="http://blog.csdn.net/yuanlulu/article/details/7220060" target="_blank" rel="external">详细的SocketCAN中文介绍戳这里</a>。另外记得：<strong>配置完以后启动can</strong></p>
+<h2 id="STM32部分"><a href="#STM32部分" class="headerlink" title="STM32部分"></a>STM32部分</h2><p>stm32的can，看数据手册，发现bitrate time只有sync，seg1，seg2，相对at91缺少prop-seg，仔细看了数据手册发现seg1包括了prop-seg部分。这样，其他部分就按照默认的配置接口。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;stm32之间的CAN通信，有自带的HAL库，实现起来还是很方便的。at91(at91sam9x35简称)的linux上面的CAN驱动，从2.6.20开始合并到了SocketCAN，采用了套接字的方式编程，与之前有很大区别。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="SocketCAN" scheme="http://yoursite.com/tags/SocketCAN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>嵌入式ubi文件系统简介</title>
+    <link href="http://yoursite.com/2017/06/15/%E5%B5%8C%E5%85%A5%E5%BC%8Fubi%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B/"/>
+    <id>http://yoursite.com/2017/06/15/嵌入式ubi文件系统简介/</id>
+    <published>2017-06-15T12:52:51.000Z</published>
+    <updated>2017-06-17T02:33:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近项目上用到了嵌入式linux，发现文件系统已经从熟知的yaffs2系统变成了ubi（Unsorted Block Images）系统。这里简单介绍下ubi文件系统的使用方法。</p>
+<a id="more"></a>
+<h2 id="配置内核支持"><a href="#配置内核支持" class="headerlink" title="配置内核支持"></a>配置内核支持</h2><p>Device Drivers  —&gt;Memory Technology Device (MTD) support  —&gt;UBI - Unsorted block images  —&gt;Enable UBI<br>配置mtd支持UBI接口</p>
+<p>File systems  —&gt;Miscellaneous filesystems  —&gt;UBIFS file system support<br>配置内核支持UBIFS文件系统</p>
+<h2 id="宿主机挂载ubi文件系统"><a href="#宿主机挂载ubi文件系统" class="headerlink" title="宿主机挂载ubi文件系统"></a>宿主机挂载ubi文件系统</h2><h3 id="ubifs驱动和mtd驱动"><a href="#ubifs驱动和mtd驱动" class="headerlink" title="ubifs驱动和mtd驱动"></a>ubifs驱动和mtd驱动</h3><p>挂载ubifs文件系统必须有mtd接口，而普通的pc机通常不用mtd管理磁盘，这里需要用到nandsim模拟器，用一片RAM空间模拟mtd设备，然后对ubifs文件系统挂载。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo modprobe nandsim first_id_byte=0xec second_id_byte=0xda third_id_byte=0x10 fourth_id_byte=0x95</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>加载NANDSIM时需要传入的4个参数时模拟目标的NANDFLASH的ID，这里我们使用三星的K9F2G08U0B，从datasheet可以查到4个字节id依次为：0xec,0xda,0x10,0x95.</p>
+</blockquote>
+<p>执行完可以在/dev/目录下找到mtd0和mtd0ro两个设备。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#ls /dev |grep mtd</div><div class="line">mtd0</div><div class="line">mtd0ro</div></pre></td></tr></table></figure></p>
+<h3 id="擦除mtd0分区"><a href="#擦除mtd0分区" class="headerlink" title="擦除mtd0分区"></a>擦除mtd0分区</h3><p>清除mtd0分区上的数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo flash_eraseall /dev/mtd0</div></pre></td></tr></table></figure></p>
+<p>这里如果提示找不到flash_eraseall命令，请安装mtd-utils。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo apt-get install mtd-utils</div></pre></td></tr></table></figure></p>
+<p>安装完以后在此擦除mtd0，可以看到如下信息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flash_eraseall has been replaced by `flash_erase &lt;mtddev&gt; 0 0`; please use it Eraseing 128Kibyte @ffe0000 -- 100% complete</div></pre></td></tr></table></figure></p>
+<h3 id="导入ubi文件系统"><a href="#导入ubi文件系统" class="headerlink" title="导入ubi文件系统"></a>导入ubi文件系统</h3><p>将rootfs.ubi装入新建的mtd0分区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#sudo dd if=rootfs.ubi of=/dev/mtd0</div><div class="line">100864+0 records in</div><div class="line">100864+0 records out</div><div class="line">51642368 bytes (52MB) copied, 0,323111s 160MB/s</div></pre></td></tr></table></figure></p>
+<h3 id="在宿主机上挂载文件系统："><a href="#在宿主机上挂载文件系统：" class="headerlink" title="在宿主机上挂载文件系统："></a>在宿主机上挂载文件系统：</h3><p>加载ubi模块，并attach到mtd0中，便可以像挂载普通mtd设备一样挂载ubifs系统。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo modprobe ubi mtd=0,2048</div></pre></td></tr></table></figure></p>
+<p>如果提示：**modprobe:ERROR:could not insert ‘ubi’ invalid argument.<br>那么执行一下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#sudo apt-get install build-essential git-core libncurses5-dev u-boot-tools</div><div class="line">#sudo apt-get install flex bison texinfo zip unzip zlib1g-dev gettext</div><div class="line">#sudo apt-get install gperf libsdl2-dev</div><div class="line">#sudo apt-get install uboot-mkimage</div><div class="line">#sudo apt-get install g++ xz-utils</div></pre></td></tr></table></figure></p>
+<p>再次加载ubi模块并attach到mtd0中。<br>新建一个挂载点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#mkdir fsmount</div></pre></td></tr></table></figure></p>
+<p>挂载文件系统：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#sudo mount -t ubifs ubi0_0 fsmount/</div><div class="line">#ls fsmount</div><div class="line">bin boot dev etc home lib media mnt proc sbin sys tmp usr var</div></pre></td></tr></table></figure></p>
+<p>这样ubifs文件系统就挂载到宿主机上了。</p>
+<h2 id="文件系统制作"><a href="#文件系统制作" class="headerlink" title="文件系统制作"></a>文件系统制作</h2><p>挂载好的文件系统，用户可以增添自定义程序，修改完成以后需要用mkfs.ubifs工具重新生成文件系统，首先安装mtd-utils工具:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo apt-get install mtd-utils</div></pre></td></tr></table></figure></p>
+<p>输入以下命令生成新的ubifs文件系统：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo mkfs.ubifs -r fsmount/ -m 2048 -e 126976 -c 2024 -o ubifs.img</div></pre></td></tr></table></figure></p>
+<p>mkfs.ubifs参数说明:</p>
+<ul>
+<li>-r 建立文件系统的目录 </li>
+<li>-m 最小的i/o传输单元</li>
+<li>-e 逻辑擦除块大小</li>
+<li>-c 最大的逻辑擦除块数</li>
+<li>-o 指定输出文件<br>其中可以通过以下命令查看最小的IO传输单元大小和逻辑擦除块大小：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#ubinfo /dev/ubi0</div><div class="line">ubi0</div><div class="line">...</div><div class="line">Logic eraseblock size:                        127696 bytes, 124KiB</div><div class="line">...</div><div class="line">Minimum input/output unit size:               2048 bytes</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>通过下面命令查看最大的逻辑擦除块数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#ubinfo /dev/ubi0_0</div><div class="line">...</div><div class="line">Size:           2024 LEBS(256999424 bytes, 245KiB)</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>然后利用ubinize工具生成fsimage.ubi文件。首先需要建立ubinize配置文件ubinize.cfg：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#vi ubinize.cfg</div></pre></td></tr></table></figure></p>
+<p>输入以下内容，保存退出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[ubifs]</div><div class="line">mode=ubi</div><div class="line">image=ubifs.img</div><div class="line">vol_id=0</div><div class="line">vol_size=64MiB</div><div class="line">vol_type=dynamic</div><div class="line">vol_name=rootfs</div><div class="line">vol_flags=autoresize</div><div class="line">vol_alignment=1</div></pre></td></tr></table></figure></p>
+<p>输入以下命令生成最终文件系统fsimage.ubi：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo ubinize -m 2048 -p 128KiB -o fsimage.ubi ubinize.cfg</div></pre></td></tr></table></figure></p>
+<p>ubinize参数说明：</p>
+<ul>
+<li>-m 最小输入/输出字节闪存单元的大小</li>
+<li>-p FLASH的物理擦除块大小</li>
+<li>-o 输出文件</li>
+</ul>
+<p>这里和mkfs.ubifs参数不通，-p的参数为物理擦除块大小，ubi工作在mtd层之上，所以需要mtd的参数，即物理参数；而ubifs工作在ubi之上，需要ubi的参数，即逻辑参数。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近项目上用到了嵌入式linux，发现文件系统已经从熟知的yaffs2系统变成了ubi（Unsorted Block Images）系统。这里简单介绍下ubi文件系统的使用方法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="ubifs" scheme="http://yoursite.com/tags/ubifs/"/>
+    
+  </entry>
   
   <entry>
     <title>golang之interface</title>
@@ -210,7 +302,7 @@ sudo /sbin/iptables-save
     <link href="http://yoursite.com/2017/03/08/2017%E5%B9%B4%E6%88%90%E9%95%BF%E8%AE%A1%E5%88%92/"/>
     <id>http://yoursite.com/2017/03/08/2017年成长计划/</id>
     <published>2017-03-08T06:38:32.000Z</published>
-    <updated>2017-04-10T13:25:41.000Z</updated>
+    <updated>2017-06-15T13:23:15.000Z</updated>
     
     <content type="html"><![CDATA[<p>进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。</p>
 <a id="more"></a>

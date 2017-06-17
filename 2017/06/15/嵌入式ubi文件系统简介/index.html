@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>嵌入式ubi文件系统简介 | utopiaprince</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近项目上用到了嵌入式linux，发现文件系统已经从熟知的yaffs2系统变成了ubi（Unsorted Block Images）系统。这里简单介绍下ubi文件系统的使用方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式ubi文件系统简介">
+<meta property="og:url" content="http://yoursite.com/2017/06/15/嵌入式ubi文件系统简介/index.html">
+<meta property="og:site_name" content="utopiaprince">
+<meta property="og:description" content="最近项目上用到了嵌入式linux，发现文件系统已经从熟知的yaffs2系统变成了ubi（Unsorted Block Images）系统。这里简单介绍下ubi文件系统的使用方法。">
+<meta property="og:updated_time" content="2017-06-17T02:33:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="嵌入式ubi文件系统简介">
+<meta name="twitter:description" content="最近项目上用到了嵌入式linux，发现文件系统已经从熟知的yaffs2系统变成了ubi（Unsorted Block Images）系统。这里简单介绍下ubi文件系统的使用方法。">
+  
+    <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">utopiaprince</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-嵌入式ubi文件系统简介" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/15/嵌入式ubi文件系统简介/" class="article-date">
+  <time datetime="2017-06-15T12:52:51.000Z" itemprop="datePublished">2017-06-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      嵌入式ubi文件系统简介
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近项目上用到了嵌入式linux，发现文件系统已经从熟知的yaffs2系统变成了ubi（Unsorted Block Images）系统。这里简单介绍下ubi文件系统的使用方法。</p>
+<a id="more"></a>
+<h2 id="配置内核支持"><a href="#配置内核支持" class="headerlink" title="配置内核支持"></a>配置内核支持</h2><p>Device Drivers  —&gt;Memory Technology Device (MTD) support  —&gt;UBI - Unsorted block images  —&gt;Enable UBI<br>配置mtd支持UBI接口</p>
+<p>File systems  —&gt;Miscellaneous filesystems  —&gt;UBIFS file system support<br>配置内核支持UBIFS文件系统</p>
+<h2 id="宿主机挂载ubi文件系统"><a href="#宿主机挂载ubi文件系统" class="headerlink" title="宿主机挂载ubi文件系统"></a>宿主机挂载ubi文件系统</h2><h3 id="ubifs驱动和mtd驱动"><a href="#ubifs驱动和mtd驱动" class="headerlink" title="ubifs驱动和mtd驱动"></a>ubifs驱动和mtd驱动</h3><p>挂载ubifs文件系统必须有mtd接口，而普通的pc机通常不用mtd管理磁盘，这里需要用到nandsim模拟器，用一片RAM空间模拟mtd设备，然后对ubifs文件系统挂载。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo modprobe nandsim first_id_byte=0xec second_id_byte=0xda third_id_byte=0x10 fourth_id_byte=0x95</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>加载NANDSIM时需要传入的4个参数时模拟目标的NANDFLASH的ID，这里我们使用三星的K9F2G08U0B，从datasheet可以查到4个字节id依次为：0xec,0xda,0x10,0x95.</p>
+</blockquote>
+<p>执行完可以在/dev/目录下找到mtd0和mtd0ro两个设备。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#ls /dev |grep mtd</div><div class="line">mtd0</div><div class="line">mtd0ro</div></pre></td></tr></table></figure></p>
+<h3 id="擦除mtd0分区"><a href="#擦除mtd0分区" class="headerlink" title="擦除mtd0分区"></a>擦除mtd0分区</h3><p>清除mtd0分区上的数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo flash_eraseall /dev/mtd0</div></pre></td></tr></table></figure></p>
+<p>这里如果提示找不到flash_eraseall命令，请安装mtd-utils。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo apt-get install mtd-utils</div></pre></td></tr></table></figure></p>
+<p>安装完以后在此擦除mtd0，可以看到如下信息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flash_eraseall has been replaced by `flash_erase &lt;mtddev&gt; 0 0`; please use it Eraseing 128Kibyte @ffe0000 -- 100% complete</div></pre></td></tr></table></figure></p>
+<h3 id="导入ubi文件系统"><a href="#导入ubi文件系统" class="headerlink" title="导入ubi文件系统"></a>导入ubi文件系统</h3><p>将rootfs.ubi装入新建的mtd0分区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#sudo dd if=rootfs.ubi of=/dev/mtd0</div><div class="line">100864+0 records in</div><div class="line">100864+0 records out</div><div class="line">51642368 bytes (52MB) copied, 0,323111s 160MB/s</div></pre></td></tr></table></figure></p>
+<h3 id="在宿主机上挂载文件系统："><a href="#在宿主机上挂载文件系统：" class="headerlink" title="在宿主机上挂载文件系统："></a>在宿主机上挂载文件系统：</h3><p>加载ubi模块，并attach到mtd0中，便可以像挂载普通mtd设备一样挂载ubifs系统。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo modprobe ubi mtd=0,2048</div></pre></td></tr></table></figure></p>
+<p>如果提示：**modprobe:ERROR:could not insert ‘ubi’ invalid argument.<br>那么执行一下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#sudo apt-get install build-essential git-core libncurses5-dev u-boot-tools</div><div class="line">#sudo apt-get install flex bison texinfo zip unzip zlib1g-dev gettext</div><div class="line">#sudo apt-get install gperf libsdl2-dev</div><div class="line">#sudo apt-get install uboot-mkimage</div><div class="line">#sudo apt-get install g++ xz-utils</div></pre></td></tr></table></figure></p>
+<p>再次加载ubi模块并attach到mtd0中。<br>新建一个挂载点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#mkdir fsmount</div></pre></td></tr></table></figure></p>
+<p>挂载文件系统：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#sudo mount -t ubifs ubi0_0 fsmount/</div><div class="line">#ls fsmount</div><div class="line">bin boot dev etc home lib media mnt proc sbin sys tmp usr var</div></pre></td></tr></table></figure></p>
+<p>这样ubifs文件系统就挂载到宿主机上了。</p>
+<h2 id="文件系统制作"><a href="#文件系统制作" class="headerlink" title="文件系统制作"></a>文件系统制作</h2><p>挂载好的文件系统，用户可以增添自定义程序，修改完成以后需要用mkfs.ubifs工具重新生成文件系统，首先安装mtd-utils工具:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo apt-get install mtd-utils</div></pre></td></tr></table></figure></p>
+<p>输入以下命令生成新的ubifs文件系统：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo mkfs.ubifs -r fsmount/ -m 2048 -e 126976 -c 2024 -o ubifs.img</div></pre></td></tr></table></figure></p>
+<p>mkfs.ubifs参数说明:</p>
+<ul>
+<li>-r 建立文件系统的目录 </li>
+<li>-m 最小的i/o传输单元</li>
+<li>-e 逻辑擦除块大小</li>
+<li>-c 最大的逻辑擦除块数</li>
+<li>-o 指定输出文件<br>其中可以通过以下命令查看最小的IO传输单元大小和逻辑擦除块大小：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#ubinfo /dev/ubi0</div><div class="line">ubi0</div><div class="line">...</div><div class="line">Logic eraseblock size:                        127696 bytes, 124KiB</div><div class="line">...</div><div class="line">Minimum input/output unit size:               2048 bytes</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>通过下面命令查看最大的逻辑擦除块数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#ubinfo /dev/ubi0_0</div><div class="line">...</div><div class="line">Size:           2024 LEBS(256999424 bytes, 245KiB)</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>然后利用ubinize工具生成fsimage.ubi文件。首先需要建立ubinize配置文件ubinize.cfg：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#vi ubinize.cfg</div></pre></td></tr></table></figure></p>
+<p>输入以下内容，保存退出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[ubifs]</div><div class="line">mode=ubi</div><div class="line">image=ubifs.img</div><div class="line">vol_id=0</div><div class="line">vol_size=64MiB</div><div class="line">vol_type=dynamic</div><div class="line">vol_name=rootfs</div><div class="line">vol_flags=autoresize</div><div class="line">vol_alignment=1</div></pre></td></tr></table></figure></p>
+<p>输入以下命令生成最终文件系统fsimage.ubi：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#sudo ubinize -m 2048 -p 128KiB -o fsimage.ubi ubinize.cfg</div></pre></td></tr></table></figure></p>
+<p>ubinize参数说明：</p>
+<ul>
+<li>-m 最小输入/输出字节闪存单元的大小</li>
+<li>-p FLASH的物理擦除块大小</li>
+<li>-o 输出文件</li>
+</ul>
+<p>这里和mkfs.ubifs参数不通，-p的参数为物理擦除块大小，ubi工作在mtd层之上，所以需要mtd的参数，即物理参数；而ubifs工作在ubi之上，需要ubi的参数，即逻辑参数。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/06/15/嵌入式ubi文件系统简介/" data-id="cj40jqjud000mr2d54ale0h01" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubifs/">ubifs</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/17/stm32与at91sam9x35的can通信/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          stm32与at91sam9x35的can通信
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/23/golang之interface/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">golang之interface</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SocketCAN/">SocketCAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubifs/">ubifs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/SQL/" style="font-size: 13.33px;">SQL</a> <a href="/tags/SocketCAN/" style="font-size: 10px;">SocketCAN</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a> <a href="/tags/ubifs/" style="font-size: 10px;">ubifs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/17/stm32与at91sam9x35的can通信/">stm32与at91sam9x35的can通信</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/嵌入式ubi文件系统简介/">嵌入式ubi文件系统简介</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/23/golang之interface/">golang之interface</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/12/loraserver之redis分析/">loraserver之redis分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/12/loraserver之sql分析/">loraserver之sql分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Gang.Cheng<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

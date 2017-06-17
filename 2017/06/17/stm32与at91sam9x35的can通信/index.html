@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>stm32与at91sam9x35的can通信 | utopiaprince</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="stm32之间的CAN通信，有自带的HAL库，实现起来还是很方便的。at91(at91sam9x35简称)的linux上面的CAN驱动，从2.6.20开始合并到了SocketCAN，采用了套接字的方式编程，与之前有很大区别。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32与at91sam9x35的can通信">
+<meta property="og:url" content="http://yoursite.com/2017/06/17/stm32与at91sam9x35的can通信/index.html">
+<meta property="og:site_name" content="utopiaprince">
+<meta property="og:description" content="stm32之间的CAN通信，有自带的HAL库，实现起来还是很方便的。at91(at91sam9x35简称)的linux上面的CAN驱动，从2.6.20开始合并到了SocketCAN，采用了套接字的方式编程，与之前有很大区别。">
+<meta property="og:updated_time" content="2017-06-17T01:07:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stm32与at91sam9x35的can通信">
+<meta name="twitter:description" content="stm32之间的CAN通信，有自带的HAL库，实现起来还是很方便的。at91(at91sam9x35简称)的linux上面的CAN驱动，从2.6.20开始合并到了SocketCAN，采用了套接字的方式编程，与之前有很大区别。">
+  
+    <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">utopiaprince</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stm32与at91sam9x35的can通信" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/17/stm32与at91sam9x35的can通信/" class="article-date">
+  <time datetime="2017-06-17T00:28:24.000Z" itemprop="datePublished">2017-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stm32与at91sam9x35的can通信
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>stm32之间的CAN通信，有自带的HAL库，实现起来还是很方便的。at91(at91sam9x35简称)的linux上面的CAN驱动，从2.6.20开始合并到了SocketCAN，采用了套接字的方式编程，与之前有很大区别。</p>
+<a id="more"></a>
+<h2 id="SocketCAN"><a href="#SocketCAN" class="headerlink" title="SocketCAN"></a>SocketCAN</h2><p>首先我们查看一下at91的can设备，输入<strong>ifconfig -a</strong>，查看信息找到<strong>canX</strong>，默认at91只开启了can0（这里是逻辑设备，实际硬件开启的是can1）。</p>
+<h3 id="启动-关闭can"><a href="#启动-关闭can" class="headerlink" title="启动/关闭can"></a>启动/关闭can</h3><p>在进行配置之前，都需要关闭can，配置完成以后再次开启。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ip link set down can0 // close</div><div class="line">$ip link set up can0   // start</div></pre></td></tr></table></figure></p>
+<h3 id="查看当前can信息"><a href="#查看当前can信息" class="headerlink" title="查看当前can信息"></a>查看当前can信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ip -details link show can0</div><div class="line">can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10 link/can</div><div class="line">      can &lt;TRIPLE-SAMPLING&gt; state ERROR-ACTIVE restart-ms 100</div><div class="line">      bitrate 400100 sample_point 0.875</div><div class="line">      tq 416 prop-seg 1 phase-seg1 2 phase-seg2 2 sjw 1</div><div class="line">      sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1</div><div class="line">      clock 133333333</div></pre></td></tr></table></figure>
+<h3 id="设置can的波特率"><a href="#设置can的波特率" class="headerlink" title="设置can的波特率"></a>设置can的波特率</h3><p>设置波特率有2种方式，一种是直接修改bitrate，另外一种是修改计算参数。</p>
+<h4 id="修改bitrate"><a href="#修改bitrate" class="headerlink" title="修改bitrate"></a>修改bitrate</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip link set can0 type can bitrate &lt;band&gt;</div></pre></td></tr></table></figure>
+<p>这里band修改成想要的波特率。这条指令大部分的时候都是正常工作的，但是在一些少见的波特率和时钟频率，可能支持不好，误码率高。修改完以后可以用查看can指令查看。</p>
+<h4 id="修改计算参数"><a href="#修改计算参数" class="headerlink" title="修改计算参数"></a>修改计算参数</h4><p>at91的datasheet里面的can章节，介绍了bitrate计算公式，我们可以算出tq、pro、seg1、seg2、sjw的具体参数，然后用指令输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ip link set can0 type can tq 125 prop-seg 6  phase-seg1 7 phase-seg2 2 sjw 1</div></pre></td></tr></table></figure></p>
+<p>设置完以后，可以用can查看指令，查看配置以后的bitrate。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>具体的SocketCAN编程，<a href="http://blog.csdn.net/yuanlulu/article/details/7220060" target="_blank" rel="external">详细的SocketCAN中文介绍戳这里</a>。另外记得：<strong>配置完以后启动can</strong></p>
+<h2 id="STM32部分"><a href="#STM32部分" class="headerlink" title="STM32部分"></a>STM32部分</h2><p>stm32的can，看数据手册，发现bitrate time只有sync，seg1，seg2，相对at91缺少prop-seg，仔细看了数据手册发现seg1包括了prop-seg部分。这样，其他部分就按照默认的配置接口。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/06/17/stm32与at91sam9x35的can通信/" data-id="cj40jqju8000kr2d5h0gy362z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SocketCAN/">SocketCAN</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/06/15/嵌入式ubi文件系统简介/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">嵌入式ubi文件系统简介</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SocketCAN/">SocketCAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubifs/">ubifs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/SQL/" style="font-size: 13.33px;">SQL</a> <a href="/tags/SocketCAN/" style="font-size: 10px;">SocketCAN</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a> <a href="/tags/ubifs/" style="font-size: 10px;">ubifs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/17/stm32与at91sam9x35的can通信/">stm32与at91sam9x35的can通信</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/嵌入式ubi文件系统简介/">嵌入式ubi文件系统简介</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/23/golang之interface/">golang之interface</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/12/loraserver之redis分析/">loraserver之redis分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/12/loraserver之sql分析/">loraserver之sql分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Gang.Cheng<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

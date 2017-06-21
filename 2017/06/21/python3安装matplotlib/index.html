@@ -3,18 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>2017年成长计划 | utopiaprince</title>
+  <title>python3安装matplotlib | utopiaprince</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。">
+  <meta name="description" content="在linux的python3上安装matplotlib，使用了pyenv管理python版本。在安装过程中提示：no module named: ‘tkinter’
+
+一般出现这类问题，是因为python3安装在tkinter之后，没有建立关系。所以我们只需要卸妆python重新安装。
+123pyenv uninstall &amp;lt;python version&amp;gt;sudo apt-get in">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2017年成长计划">
-<meta property="og:url" content="http://yoursite.com/2017/03/08/2017年成长计划/index.html">
+<meta property="og:title" content="python3安装matplotlib">
+<meta property="og:url" content="http://yoursite.com/2017/06/21/python3安装matplotlib/index.html">
 <meta property="og:site_name" content="utopiaprince">
-<meta property="og:description" content="进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。">
-<meta property="og:updated_time" content="2017-06-17T14:58:30.000Z">
+<meta property="og:description" content="在linux的python3上安装matplotlib，使用了pyenv管理python版本。在安装过程中提示：no module named: ‘tkinter’
+
+一般出现这类问题，是因为python3安装在tkinter之后，没有建立关系。所以我们只需要卸妆python重新安装。
+123pyenv uninstall &amp;lt;python version&amp;gt;sudo apt-get in">
+<meta property="og:updated_time" content="2017-06-21T13:55:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2017年成长计划">
-<meta name="twitter:description" content="进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。">
+<meta name="twitter:title" content="python3安装matplotlib">
+<meta name="twitter:description" content="在linux的python3上安装matplotlib，使用了pyenv管理python版本。在安装过程中提示：no module named: ‘tkinter’
+
+一般出现这类问题，是因为python3安装在tkinter之后，没有建立关系。所以我们只需要卸妆python重新安装。
+123pyenv uninstall &amp;lt;python version&amp;gt;sudo apt-get in">
   
     <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
   
@@ -61,10 +70,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-2017年成长计划" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-python3安装matplotlib" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/08/2017年成长计划/" class="article-date">
-  <time datetime="2017-03-08T06:38:32.000Z" itemprop="datePublished">2017-03-08</time>
+    <a href="/2017/06/21/python3安装matplotlib/" class="article-date">
+  <time datetime="2017-06-21T13:43:40.000Z" itemprop="datePublished">2017-06-21</time>
 </a>
     
   </div>
@@ -75,7 +84,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      2017年成长计划
+      python3安装matplotlib
     </h1>
   
 
@@ -83,53 +92,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>进入嵌入式软件这个行业已经9年了，一直致力于软件技术的掌握，忽略了个人软实力的提升。在2017年需要作出改观，下面是我的2017年计划。</p>
-<a id="more"></a>
-<h2 id="SDK优化"><a href="#SDK优化" class="headerlink" title="SDK优化"></a>SDK优化</h2><p>现在基于wsnos的开发环境已经基本成熟，再此基础上开展的sdk化工作刚刚开头，在接下来的一年里，针对sdk方面，优化几点：</p>
-<ul>
-<li>协议栈的稳定性</li>
-<li>开发使用便捷性</li>
-<li>平台固定</li>
-</ul>
-<h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><p>嵌入式sdk方面以无线协议做为基础，已经实现了与云的通信。个人对服务器方面的了解比较少，对于系统整体架构认知还有所欠缺，缺乏系统设计能力。在这一年里需要做到：</p>
-<ul>
-<li><del>以LoRaWAN为案例，自行搭建私有服务器，实现整套LPWA网络系统架设。</del></li>
-<li>每天查看loraserver,lora-app-server,gateway仓库的issue.</li>
-<li>学习搭建lora的cs服务器</li>
-</ul>
-<h2 id="文档能力"><a href="#文档能力" class="headerlink" title="文档能力"></a>文档能力</h2><p>软件配套的文档写的太少，对于后续的开发者以及自己都是一个障碍，后续软件开发要重视起来，每个模块、系统文档工作都要配备好</p>
-<h2 id="演讲能力"><a href="#演讲能力" class="headerlink" title="演讲能力"></a>演讲能力</h2><p>计划在这一年里面针对sdk，架构方面做3次分享，把一年内的成果展示出来</p>
-<ul>
-<li><del>SDK PPT分享</del></li>
-<li>LoRaWAN系统架构分享</li>
-<li><del>软件开发测试分享</del></li>
-</ul>
+        <p>在linux的python3上安装matplotlib，使用了pyenv管理python版本。<br>在安装过程中提示：<br>no module named: ‘tkinter’</p>
+<!-- for more -->
+<p>一般出现这类问题，是因为python3安装在tkinter之后，没有建立关系。所以我们只需要卸妆python重新安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pyenv uninstall &lt;python version&gt;</div><div class="line">sudo apt-get install python3-tk</div><div class="line">pyenv install &lt;python version&gt;</div></pre></td></tr></table></figure>
+<p>等待编译安装即可。<br>如果嫌pyenv install太慢，可以提前下载好python版本，放入~/.pyenv/cache/目录下，重新执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pyenv install &lt;python version&gt;</div></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/08/2017年成长计划/" data-id="cj472akqx000025d5a6nsbj3z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/06/21/python3安装matplotlib/" data-id="cj472akrr000g25d5r3430a0t" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python3/">python3</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2017/03/15/jenkins与gitlab配置记录/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          jenkins与gitlab配置记录
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/02/10/LoRaWAN协议之添加频段支持/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/06/17/stm32与at91sam9x35的can通信/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">LoRaWAN协议之添加频段支持</div>
+      <div class="article-nav-title">stm32与at91sam9x35的can通信</div>
     </a>
   
 </nav>

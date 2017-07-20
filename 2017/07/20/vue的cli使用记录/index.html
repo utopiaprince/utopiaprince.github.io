@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>git-submodule体会 | utopiaprince</title>
+  <title>vue的cli使用记录 | utopiaprince</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。">
+  <meta name="description" content="使用vue-cli的心得记录。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git-submodule体会">
-<meta property="og:url" content="http://yoursite.com/2017/01/18/git-submodule体会/index.html">
+<meta property="og:title" content="vue的cli使用记录">
+<meta property="og:url" content="http://yoursite.com/2017/07/20/vue的cli使用记录/index.html">
 <meta property="og:site_name" content="utopiaprince">
-<meta property="og:description" content="最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。">
-<meta property="og:updated_time" content="2017-04-08T12:39:46.000Z">
+<meta property="og:description" content="使用vue-cli的心得记录。">
+<meta property="og:updated_time" content="2017-07-20T15:50:36.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git-submodule体会">
-<meta name="twitter:description" content="最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。">
+<meta name="twitter:title" content="vue的cli使用记录">
+<meta name="twitter:description" content="使用vue-cli的心得记录。">
   
     <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
   
@@ -61,10 +61,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-git-submodule体会" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-vue的cli使用记录" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/18/git-submodule体会/" class="article-date">
-  <time datetime="2017-01-18T02:45:22.000Z" itemprop="datePublished">2017-01-18</time>
+    <a href="/2017/07/20/vue的cli使用记录/" class="article-date">
+  <time datetime="2017-07-20T15:43:56.000Z" itemprop="datePublished">2017-07-20</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      git-submodule体会
+      vue的cli使用记录
     </h1>
   
 
@@ -83,59 +83,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近项目上在使用git的submodule功能来维护，其中有几点，需要特别注意。</p>
+        <p>使用vue-cli的心得记录。</p>
 <a id="more"></a>
-<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>通过下面的指令来添加子模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add &lt;仓库地址&gt; &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="phantomjs-prebuilt"><a href="#phantomjs-prebuilt" class="headerlink" title="phantomjs-prebuilt"></a>phantomjs-prebuilt</h2><p>使用vue-webpack模版的时候，创建一个项目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue init webpack my-webpack-project</div></pre></td></tr></table></figure></p>
 <ul>
-<li>&lt;仓库地址&gt; 是我们想添加的子模块源仓库地址</li>
-<li>&lt;本地路径&gt; 是我们想把子模块存放在本项目下的路径,比如:libs/libxxx</li>
+<li>webpack是项目模板</li>
+<li>my-webpack-project是项目名称</li>
 </ul>
-<p>执行完上面命令以后，会做三件事：</p>
-<ol>
-<li>clone仓库到指定路径</li>
-<li><p>根目录下.gitmodule文件添加submodule具体信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;子模块名&quot;]</div><div class="line">    path = 本地路径</div><div class="line">    url = 仓库地址</div></pre></td></tr></table></figure>
-</li>
-<li><p>根目录下.git/config文件更新submodule的仓库地址 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;子模块名&quot;]</div><div class="line">    url = 仓库地址</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="检出"><a href="#检出" class="headerlink" title="检出"></a>检出</h2><p>clone一个带submodule的项目，clone完以后submodule的文件并不会随父项目一起检出，因为父项目只是记录了submodule的commitID，需要另外的操作才行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule init</div><div class="line">git submodule update</div></pre></td></tr></table></figure></p>
-<p>执行完上面命令以后，submodule的文件就会检出，每次submodule更新，都需要执行上面的命令。<br>或者我们可以在clone的时候通过添加<strong>- -recursive</strong>参数来一次性检出。</p>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>如果submodule有更新，在本地项目下git pull是不会更新submoudle的。我们需要通过下面的指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule update</div><div class="line">git submodule foreach git pull origin master</div></pre></td></tr></table></figure></p>
-<p>可以把上面2条指令写入update_submodules.sh脚本，每次执行只需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./update_submodules.sh</div></pre></td></tr></table></figure></p>
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>如果某个submodule不需要了，想删除，那么我们需要删除 <strong>.git/config</strong> 和 <strong>.gitmodule</strong> 文件里面submodule相关部分，然后在执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rm --cached &lt;本地路径&gt;</div></pre></td></tr></table></figure></p>
-<p>这样才能将submodule从本地仓库删除干净，别忘记提交push。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>git submodule能够维护多个项目，好处很明显。但是缺点也存在，每次submodule更新，并不会主动更新带本地仓库，需要人为的去执行更新命令。所以想要每次主动执行update_submodules.sh。</p>
-<p>下一篇会介绍git submodule功能升级版git subtree。</p>
+<p>完成以后的目录结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">├── build/                      # webpack config files</div><div class="line">│   └── ...</div><div class="line">├── config/                     </div><div class="line">│   ├── index.js                # main project config</div><div class="line">│   └── ...</div><div class="line">├── src/</div><div class="line">│   ├── main.js                 # app entry file</div><div class="line">│   ├── App.vue                 # main app component</div><div class="line">│   ├── components/             # ui components</div><div class="line">│   │   └── ...</div><div class="line">│   └── assets/                 # module assets (processed by webpack)</div><div class="line">│       └── ...</div><div class="line">├── static/                     # pure static assets (directly copied)</div><div class="line">├── test/</div><div class="line">│   └── unit/                   # unit tests</div><div class="line">│   │   ├── specs/              # test spec files</div><div class="line">│   │   ├── index.js            # test build entry file</div><div class="line">│   │   └── karma.conf.js       # test runner config file</div><div class="line">│   └── e2e/                    # e2e tests</div><div class="line">│   │   ├── specs/              # test spec files</div><div class="line">│   │   ├── custom-assertions/  # custom assertions </div><div class="line">for</div><div class="line"> e2e tests</div><div class="line">│   │   ├── runner.js           # test runner script</div><div class="line">│   │   └── nightwatch.conf.js  # test runner config file</div><div class="line">├── .babelrc                    # babel config</div><div class="line">├── .editorconfig.js            # editor config</div><div class="line">├── .eslintrc.js                # eslint config</div><div class="line">├── index.html                  # index.html template</div><div class="line">└── package.json                # build scripts and dependencies</div></pre></td></tr></table></figure></p>
+<p>在安装依赖的过程中可能提示<strong>phantomjs-prebuilt</strong>失败。<br>这个时候可以用下面命令解决。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install phantomjs-prebuilt -g</div><div class="line">npm install</div></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/18/git-submodule体会/" data-id="cj5cm5w880004ryd5td059mtj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2017/07/20/vue的cli使用记录/" data-id="cj5cm5w94000rryd522oljhps" class="article-share-link">Teilen</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2017/02/10/hexo引用站内文章链接/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          hexo引用站内文章链接
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/01/17/LoRaWAN协议之入网分析/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/07/13/mofit功能清单/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">LoRaWAN协议之入网分析</div>
+      <div class="article-nav-title">mofit功能清单</div>
     </a>
   
 </nav>

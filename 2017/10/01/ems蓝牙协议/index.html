@@ -5,16 +5,76 @@
   
   <title>ems蓝牙协议 | utopiaprince</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前提该文档定义了ems智能设备与手机之间的蓝牙协议，ems设备采用双蓝牙模块，均工作在蓝牙从模式。协议载荷部分采用json格式，考虑嵌入式设备的运算、内存等因素，json内不得出现中文。| 简称 | 定义 ||–| – || 蓝牙a | 与用户手机连接的蓝牙模块，提供ems设备启动操作，并可以提供参数配置、设备暂停等操作 || 蓝牙b | 与教练手机连接的蓝牙模块，在ems设备启动以后提供参数配置">
+  <meta name="description" content="版本
+
+
+版本
+修改者
+修改时间
+修改内容
+
+
+
+
+0.1
+程刚
+2017-10-06
+完成初稿，定义交互协议，具体参数
+
+
+0.2
+程刚
+2017-10-10
+增加设备上报异常指令；增加单独肌肉群电极异常代码；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ems蓝牙协议">
 <meta property="og:url" content="http://yoursite.com/2017/10/01/ems蓝牙协议/index.html">
 <meta property="og:site_name" content="utopiaprince">
-<meta property="og:description" content="前提该文档定义了ems智能设备与手机之间的蓝牙协议，ems设备采用双蓝牙模块，均工作在蓝牙从模式。协议载荷部分采用json格式，考虑嵌入式设备的运算、内存等因素，json内不得出现中文。| 简称 | 定义 ||–| – || 蓝牙a | 与用户手机连接的蓝牙模块，提供ems设备启动操作，并可以提供参数配置、设备暂停等操作 || 蓝牙b | 与教练手机连接的蓝牙模块，在ems设备启动以后提供参数配置">
-<meta property="og:updated_time" content="2017-10-03T15:49:36.000Z">
+<meta property="og:description" content="版本
+
+
+版本
+修改者
+修改时间
+修改内容
+
+
+
+
+0.1
+程刚
+2017-10-06
+完成初稿，定义交互协议，具体参数
+
+
+0.2
+程刚
+2017-10-10
+增加设备上报异常指令；增加单独肌肉群电极异常代码；">
+<meta property="og:updated_time" content="2017-10-13T14:23:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ems蓝牙协议">
-<meta name="twitter:description" content="前提该文档定义了ems智能设备与手机之间的蓝牙协议，ems设备采用双蓝牙模块，均工作在蓝牙从模式。协议载荷部分采用json格式，考虑嵌入式设备的运算、内存等因素，json内不得出现中文。| 简称 | 定义 ||–| – || 蓝牙a | 与用户手机连接的蓝牙模块，提供ems设备启动操作，并可以提供参数配置、设备暂停等操作 || 蓝牙b | 与教练手机连接的蓝牙模块，在ems设备启动以后提供参数配置">
+<meta name="twitter:description" content="版本
+
+
+版本
+修改者
+修改时间
+修改内容
+
+
+
+
+0.1
+程刚
+2017-10-06
+完成初稿，定义交互协议，具体参数
+
+
+0.2
+程刚
+2017-10-10
+增加设备上报异常指令；增加单独肌肉群电极异常代码；">
   
     <link rel="alternate" href="/atom.xml" title="utopiaprince" type="application/atom+xml">
   
@@ -83,7 +143,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>该文档定义了ems智能设备与手机之间的蓝牙协议，ems设备采用双蓝牙模块，均工作在蓝牙从模式。协议载荷部分采用json格式，考虑嵌入式设备的运算、内存等因素，json内不得出现中文。<br>| 简称 | 定义 |<br>|–| – |<br>| 蓝牙a | 与用户手机连接的蓝牙模块，提供ems设备启动操作，并可以提供参数配置、设备暂停等操作 |<br>| 蓝牙b | 与教练手机连接的蓝牙模块，在ems设备启动以后提供参数配置、设备暂停等操作 |</p>
+        <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><table>
+<thead>
+<tr>
+<th>版本</th>
+<th>修改者</th>
+<th>修改时间</th>
+<th>修改内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>程刚</td>
+<td>2017-10-06</td>
+<td>完成初稿，定义交互协议，具体参数</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>程刚</td>
+<td>2017-10-10</td>
+<td>增加设备上报异常指令；增加单独肌肉群电极异常代码；</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>该文档定义了ems智能设备与手机之间的蓝牙协议，ems设备采用双蓝牙模块，均工作在蓝牙从模式。协议载荷部分采用json格式，考虑嵌入式设备的运算、内存等因素，json内不得出现中文。<br>| 简称 | 定义 |<br>|–| – |<br>| 蓝牙a | 与用户手机连接的蓝牙模块，提供ems设备启动操作，并可以提供参数配置、设备暂停等操作 |<br>| 蓝牙b | 与教练手机连接的蓝牙模块，在ems设备启动以后提供参数配置、设备暂停等操作 |</p>
 <h2 id="公共参数"><a href="#公共参数" class="headerlink" title="公共参数"></a>公共参数</h2><table>
 <thead>
 <tr>
@@ -190,10 +275,11 @@
 </table>
 <h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><p>当前空中接口定义为1.0版本，对应<strong>“1.0”</strong>。</p>
 <h3 id="device"><a href="#device" class="headerlink" title="device"></a>device</h3><p>ems设备的唯一id，16个字符表示，示例：<br>“1122334455667788”或者”AABBCCDDEEFF1100”。</p>
-<h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><p>定义当前帧的控制类型<br>| 字符串 | 含义 |<br>| — | — |<br>| start | 设备启动指令，只能蓝牙a通道响应 |<br>| pause | 设备暂停指令，用于特殊情况暂停设备运行 |<br>| continue | 设备继续指令，用于解除特殊情况后恢复设备运行 |<br>| stop | 设备停止指令，用于提前停止设备运行，单次训练完成，只能蓝牙a通道响应 |<br>| set | 设备设置指令，需要配合后面的其他参数使用 |<br>| get | 设备获取指令，获取当前设备运行状态中所有参数 |<br>| ack | 设备应答指令，针对上面所有指令的应答 |</p>
+<h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><p>定义当前帧的控制类型<br>| 字符串 | 含义 |<br>| — | — |<br>| start | 设备启动指令，只能蓝牙a通道响应 |<br>| pause | 设备暂停指令，用于特殊情况暂停设备运行 |<br>| continue | 设备继续指令，用于解除特殊情况后恢复设备运行 |<br>| stop | 设备停止指令，用于提前停止设备运行，单次训练完成，只能蓝牙a通道响应 |<br>| set | 设备设置指令，需要配合后面的其他参数使用 |<br>| get | 设备获取指令，获取当前设备运行状态中所有参数 |<br>| put | 设备上报指令，终端设备的异常告警 |<br>| ack | 应答指令，针对上面所有指令的应答 |</p>
 <h3 id="training-program"><a href="#training-program" class="headerlink" title="training_program"></a>training_program</h3><p>该参数指定训练方案，有以下几种可选方案：<br>| 数值 | 含义 |<br>| — | — |<br>| 1 | 按摩 |<br>| 2 | 有氧 |<br>| 3 | 力量 |<br>| 4 | 自定义 |</p>
 <h3 id="training-time"><a href="#training-time" class="headerlink" title="training_time"></a>training_time</h3><p>该参数指定了训练时长，只对一次训练有效，指定了从设备开始到设备停止的时间。</p>
 <h3 id="waveform"><a href="#waveform" class="headerlink" title="waveform"></a>waveform</h3><p>该参数指示电极上的最终波形。<br>| 数值 | 含义 |<br>| — | — |<br>| 1 | 方波 |<br>| 2 | 矩形波 |<br>| 3 | 正弦波 |</p>
+<h3 id="total-strength"><a href="#total-strength" class="headerlink" title="total_strength"></a>total_strength</h3><p>该参数指示了电极上的上限强度，最初提供的电压。百分比的形式，比如80%，则为80.</p>
 <h3 id="pulse-interval"><a href="#pulse-interval" class="headerlink" title="pulse_interval"></a>pulse_interval</h3><p>肌肉接受电流刺激时保持收缩状态的时间，一次刺激的持续时间，测量单位为秒</p>
 <ul>
 <li>超过100hz:1-2秒脉冲间隔</li>
@@ -210,12 +296,15 @@
 <li>50-90hz:II型肌纤维，力量训练推荐80-85hz</li>
 <li>90-120hz:IIB型肌纤维</li>
 </ul>
-<h3 id="muscles"><a href="#muscles" class="headerlink" title="muscles"></a>muscles</h3><p>该list指定了实际10个肌肉群电极的单独刺激方案：<br>| 参数 | 类型 | 是否必填  | 最大长度 | 描述 |<br>| — | — | — | — | — | — |<br>| muscle | string | 是 | 10 | 指定配置的肌肉群 |<br>| strength | int32 | 是 | 3 | 指定肌肉群的刺激强度，0-100 |</p>
+<h3 id="muscles"><a href="#muscles" class="headerlink" title="muscles"></a>muscles</h3><p>该list指定了实际10个肌肉群电极的单独刺激方案：<br>| 参数 | 类型 | 是否必填  | 最大长度 | 描述 |<br>| — | — | — | — | — | — |<br>| muscle | string | 是 | 10 | 指定配置的肌肉群 |<br>| strength | int32 | 是 | 3 | 指定肌肉群的刺激强度，0-100 |<br>| status | int | 否 | 2 | 指示当前肌肉群的异常状态 |</p>
 <ul>
 <li>muscle<br>配置参数作用的指定肌肉群<br>| 数值 | 含义 |<br>| — | — |<br>| 1 |  二头肌 |<br>| 2 |  斜方肌|<br>| 3 |  胸部|<br>| 4 |  背部|<br>| 5 |  腹部|<br>| 6 |  腰部|<br>| 7 |  四方肌|<br>| 8 |  臀肌|<br>| 9 |  额外|<br>| 10 |  大腿肌肉的后部|</li>
 </ul>
 <ul>
-<li>strength<br>电压最大值（按摩、有氧训练方案下只能调节该值，其余5个参数无法配置）</li>
+<li><p>strength<br>电压最大值（按摩、有氧训练方案下只能调节该值，其余5个参数无法配置）</p>
+</li>
+<li><p>status<br>当前肌肉群的异常状态，设备上报的异常代码<br>| 数值 | 含义 |<br>| — | — |<br>| 0 | 正常 |<br>| 1 |  电极接触异常 |<br>| 2 |  电压检测异常 |</p>
+</li>
 </ul>
 <h2 id="推荐方案"><a href="#推荐方案" class="headerlink" title="推荐方案"></a>推荐方案</h2><h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><table>
 <thead>
@@ -290,7 +379,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/01/ems蓝牙协议/" data-id="cj8bs65hy0001ia30vzyr13t1" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2017/10/01/ems蓝牙协议/" data-id="cjcn1fhve0009u330uexyj726" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mofit/">mofit</a></li></ul>
@@ -300,6 +389,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/10/05/ems主机、从机i2c协议/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          ems主机、从机i2c协议
+        
+      </div>
+    </a>
   
   
     <a href="/2017/07/20/vue的cli使用记录/" id="article-nav-older" class="article-nav-link-wrap">
@@ -323,7 +421,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SocketCAN/">SocketCAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mofit/">mofit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubifs/">ubifs</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IAP/">IAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SocketCAN/">SocketCAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mofit/">mofit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubifs/">ubifs</a></li></ul>
     </div>
   </div>
 
@@ -333,7 +431,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/SQL/" style="font-size: 13.33px;">SQL</a> <a href="/tags/SocketCAN/" style="font-size: 10px;">SocketCAN</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a> <a href="/tags/mofit/" style="font-size: 13.33px;">mofit</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/ubifs/" style="font-size: 10px;">ubifs</a>
+      <a href="/tags/IAP/" style="font-size: 10px;">IAP</a> <a href="/tags/LoRaWAN/" style="font-size: 20px;">LoRaWAN</a> <a href="/tags/SQL/" style="font-size: 13.33px;">SQL</a> <a href="/tags/SocketCAN/" style="font-size: 10px;">SocketCAN</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 16.67px;">golang</a> <a href="/tags/iot/" style="font-size: 10px;">iot</a> <a href="/tags/mofit/" style="font-size: 16.67px;">mofit</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/ubifs/" style="font-size: 10px;">ubifs</a>
     </div>
   </div>
 
@@ -342,7 +440,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
     </div>
   </div>
 
@@ -355,6 +453,14 @@
       <ul>
         
           <li>
+            <a href="/2018/01/20/stm32l的iap/">stm32l的iap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/05/ems主机、从机i2c协议/">ems主机、从机i2c协议</a>
+          </li>
+        
+          <li>
             <a href="/2017/10/01/ems蓝牙协议/">ems蓝牙协议</a>
           </li>
         
@@ -364,14 +470,6 @@
         
           <li>
             <a href="/2017/07/13/mofit功能清单/">mofit功能清单</a>
-          </li>
-        
-          <li>
-            <a href="/2017/06/21/python3安装matplotlib/">python3安装matplotlib</a>
-          </li>
-        
-          <li>
-            <a href="/2017/06/17/stm32与at91sam9x35的can通信/">stm32与at91sam9x35的can通信</a>
           </li>
         
       </ul>
@@ -386,7 +484,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 Gang.Cheng<br>
+      &copy; 2018 Gang.Cheng<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
